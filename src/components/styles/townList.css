@@ -1,0 +1,86 @@
+.town-list {
+  width: 20%;
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(144, 141, 141, 0.829);
+}
+
+.town-list__header {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.town-list__header_dark {
+  color: white;
+  background-color: black;
+}
+
+.town-list__adding-btn {
+  margin-right: 25px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: rgb(55, 130, 221);
+}
+
+.checkbox {
+  margin-right: 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox__element {
+  margin-right: 10px;
+  margin-left: 5px;
+
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.checkbox__element:checked ~ .checkbox__decorate::after {
+  display: block;
+}
+
+.checkbox__decorate {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgb(55, 130, 221);
+}
+
+.checkbox__decorate::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 20px;
+  height: 20px;
+  background-image: url("../../img/check-mark-icon.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.town-list__input {
+  margin-top: 20px;
+  margin-right: 20px;
+  padding: 3px;
+}
+
+.town-list__add-city-btn {
+  margin-top: 20px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(55, 130, 221);
+}
