@@ -37,6 +37,7 @@
 .checkbox__element {
   margin-right: 10px;
   margin-left: 5px;
+  /* margin-bottom: 80px; */
 
   width: 0;
   height: 0;
@@ -72,15 +73,17 @@
 }
 
 .town-list__input {
-  margin-top: 20px;
   margin-right: 20px;
   padding: 3px;
 }
 
+.town-list__input-error {
+  border-color: red;
+}
+
 .town-list__add-city-btn {
-  margin-top: 20px;
   padding: 5px;
   border: none;
   border-radius: 5px;
-  background-color: rgb(55, 130, 221);
+  background-color: rgb(55, 130, 220);
 }

@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./styles/townList.css";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
+import InputError from "./inputError";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMeasure } from "../store/slices/townSlice";
 import weatherService from "../services/weatherService";
 import classNames from "classnames";
 
 function TownList() {
-
   const ENTER_KEY_CODE = 13;
   const townsArr = useMemo(
     () => ["Paris", "Moscow", "Cairo", "Riyadh", "Barcelona"],
@@ -17,6 +17,7 @@ function TownList() {
   const [townsWeather, setTownsWeather] = useState([]);
   const [addingCity, setAddingCity] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [showError, setShowError] = useState(false);
   const dispatch = useDispatch();
   const { measure } = useSelector((state) => state.townList);
   let { theme } = useSelector((state) => state.theme);
@@ -27,6 +28,7 @@ function TownList() {
       try {
         const result = await weatherService.getTownWeatherByName(town);
         setTownsWeather((townsWeather) => [...townsWeather, result]);
+        console.log(result);
       } catch (err) {
         console.log(err);
       }
@@ -42,27 +44,46 @@ function TownList() {
   };
 
   const addNewCity = async () => {
-    try {
-      const result = await weatherService.getTownWeatherByName(inputValue);
-      console.log(result);
-      setTownsWeather([...townsWeather, result]);
-      setAddingCity(false);
-    } catch (err) {
-      console.log(err);
+    let townInTheList = townsWeather.find(
+      (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
+    );
+    if (townInTheList) {
+      setShowError(true);
+    } else {
+      try {
+        const result = await weatherService.getTownWeatherByName(inputValue);
+        setTownsWeather([...townsWeather, result]);
+        setShowError(false);
+        setAddingCity(false);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
   const addNewCityByEnter = async (e) => {
     if (e.keyCode !== ENTER_KEY_CODE) return;
-    try {
-      const result = await weatherService.getTownWeatherByName(inputValue);
-      console.log(result);
-      setTownsWeather([...townsWeather, result]);
-      setAddingCity(false);
-    } catch (err) {
-      console.log(err);
+    let townInTheList = townsWeather.find(
+      (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
+    );
+    if (townInTheList) {
+      setShowError(true);
+    } else {
+      try {
+        const result = await weatherService.getTownWeatherByName(inputValue);
+
+        setTownsWeather([...townsWeather, result]);
+        setShowError(false);
+        setAddingCity(false);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
+
+  const inputClass = showError
+    ? "town-list__input town-list__input-error"
+    : "town-list__input";
 
   const classTownListHeader = classNames("town-list__header", {
     "town-list__header_dark": (theme = "dark"),
@@ -119,11 +140,11 @@ function TownList() {
         </label>
       </Flex>
       {addingCity && (
-        <Flex>
+        <Flex margin="20px 0 0">
           <input
             type="text"
             placeholder="Enter the city"
-            className="town-list__input"
+            className={inputClass}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => addNewCityByEnter(e)}
           />
@@ -132,6 +153,7 @@ function TownList() {
           </button>
         </Flex>
       )}
+      {showError && <InputError />}
     </aside>
   );
 }
