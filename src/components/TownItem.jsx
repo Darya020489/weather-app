@@ -23,10 +23,8 @@ function TownItem({ town, deleteTown }) {
         src={`http://openweathermap.org/img/w/${town.list[0].weather[0].icon}.png`}
         alt=""
       />
-      <div className="town__wrap">
         <p className="town__desc">{town.list[0].weather[0].description}</p>
         <button className="town__delete" onClick={() => deleteTown(town.city.id)}>x</button>
-      </div>
     </div>
   );
 }

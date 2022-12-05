@@ -1,7 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import townSlice from "./slices/townSlice";
+import townListSlice from "./slices/townListSlice";
 import themeSlice from "./slices/themeSlice";
+import townWeatherSlice from "./slices/townWeatherSlice";
 
 export const store = configureStore({
-  reducer: { townList: townSlice, theme: themeSlice },
+  reducer: {
+    townList: townListSlice,
+    theme: themeSlice,
+    townWeather: townWeatherSlice,
+  },
 });

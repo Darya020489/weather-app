@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -14,24 +14,17 @@ img {
 }
 
 .App {
-  /* display: flex;
-  flex-direction: column; */
   min-height: 100vh;
   min-width: 100vw;
   text-align: center;
 }
 
-/* .App__body {
-  display: flex;
-  /* flex-direction: column; */
-
-  /* text-align: center;
-} */ 
-
-.App__header{
+.App__header {
   padding: 10px;
-
+  font-size: 24px;
+  text-shadow: 1px 1px 2px grey;
 }
 
-
-
+.App__img {
+  width: 50px;
+}

@@ -4,7 +4,7 @@ import Flex from "./Flex";
 import TownItem from "./TownItem";
 import InputError from "./inputError";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMeasure } from "../store/slices/townSlice";
+import { changeMeasure } from "../store/slices/townListSlice";
 import weatherService from "../services/weatherService";
 import classNames from "classnames";
 
@@ -26,7 +26,7 @@ function TownList() {
     townsArr.forEach(async (town) => {
       console.log(town);
       try {
-        const result = await weatherService.getTownWeatherByName(town);
+        const result = await weatherService.getByName(town);
         setTownsWeather((townsWeather) => [...townsWeather, result]);
         console.log(result);
       } catch (err) {
@@ -51,7 +51,7 @@ function TownList() {
       setShowError(true);
     } else {
       try {
-        const result = await weatherService.getTownWeatherByName(inputValue);
+        const result = await weatherService.getByName(inputValue);
         setTownsWeather([...townsWeather, result]);
         setShowError(false);
         setAddingCity(false);
@@ -91,7 +91,7 @@ function TownList() {
 
   return (
     <aside className="town-list">
-      <h2 className={classTownListHeader}>Today in the world</h2>
+      <h2 className={classTownListHeader}>Today</h2>
       <Flex direction="column" className="town-list__body">
         {townsWeather.length ? (
           townsWeather.map((town) => (

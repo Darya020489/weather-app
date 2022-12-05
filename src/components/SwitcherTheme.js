@@ -51,13 +51,11 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function CustomizedSwitches({switchTheme}) {
+export default function CustomizedSwitches({ switchTheme }) {
   return (
-    <FormGroup>
-      <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} />}
-        onChange={switchTheme}
-      />
-    </FormGroup>
+    <FormControlLabel
+      control={<MaterialUISwitch sx={{ m: 1 }} />}
+      onChange={switchTheme}
+    />
   );
 }

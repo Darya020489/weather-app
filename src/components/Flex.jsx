@@ -6,7 +6,10 @@ const FlexContainer = styled.div`
   flex-direction: ${({ direction }) => direction || "row"};
   align-items: ${({ align }) => align || "center"};
   justify-content: ${({ justify }) => justify || "center"};
-  margin: ${({margin}) => margin || ""};
+  margin: ${({ margin }) => margin || ""};
+  padding: ${({padding}) => padding || ''};
+  background-color: ${({ background }) => background || ""};
+  border: ${({ border }) => border || ""};
 `;
 
 function Flex(props) {
