@@ -2,16 +2,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./styles/townList.css";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
-import InputError from "./inputError";
+import InputError from "./errors/inputError";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMeasure } from "../store/slices/townListSlice";
 import weatherService from "../services/weatherService";
 import classNames from "classnames";
+import AsideLoader from './loaders/AsideLoader';
 
 function TownList() {
   const ENTER_KEY_CODE = 13;
   const townsArr = useMemo(
-    () => ["Paris", "Moscow", "Cairo", "Riyadh", "Barcelona"],
+    () => ["Paris", "Moscow", "Cairo"],
     []
   );
   const [townsWeather, setTownsWeather] = useState([]);
@@ -63,14 +64,14 @@ function TownList() {
 
   const addNewCityByEnter = async (e) => {
     if (e.keyCode !== ENTER_KEY_CODE) return;
-    let townInTheList = townsWeather.find(
+    let townInList = townsWeather.find(
       (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
     );
-    if (townInTheList) {
+    if (townInList) {
       setShowError(true);
     } else {
       try {
-        const result = await weatherService.getTownWeatherByName(inputValue);
+        const result = await weatherService.getByName(inputValue);
 
         setTownsWeather([...townsWeather, result]);
         setShowError(false);
@@ -86,7 +87,7 @@ function TownList() {
     : "town-list__input";
 
   const classTownListHeader = classNames("town-list__header", {
-    "town-list__header_dark": (theme = "dark"),
+    "town-list__header_dark": (theme === "dark"),
   });
 
   return (
@@ -99,10 +100,11 @@ function TownList() {
               key={town.city.id}
               town={town}
               deleteTown={deleteTown}
+              showComponents={true}
             ></TownItem>
           ))
         ) : (
-          <div>Loading...</div>
+          <AsideLoader/>
         )}
       </Flex>
       <Flex>

@@ -11,8 +11,9 @@ export const getWeatherByCoord = createAsyncThunk(
   "town/getWeatherByCoord",
   async (coord, { rejectWithWalue }) => {
     try {
-      const result = await weatherService.getByCoord(coord);
-      console.log(result);
+      const resultByCoord = await weatherService.getByCoord(coord);
+      console.log(resultByCoord);
+      const result = await weatherService.getByName(resultByCoord.name);
       return result;
     } catch (err) {
       console.log(err);
