@@ -9,7 +9,7 @@ const weatherService = {
     return data;
   },
   async getByCoord({lat, lon}) {
-    const {data} = await api.get(`weather?lat=${lat}&lon=${lon}&appid=${key}`);
+    const {data} = await api.get(`forecast?lat=${lat}&lon=${lon}&appid=${key}`);
 return data;
   }
 };

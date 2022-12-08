@@ -1,11 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import "./styles/townItem.css";
+import "../assets/styles/townItem.css";
 import { getTemperature } from "../functions/getTemperature";
+import classNames from "classnames";
 
 function TownItem({ town, deleteTown, showComponents }) {
-  const measure = useSelector((state) => state.townList.measure);
-  const temperature = getTemperature(town, measure);
+  console.log(town);
+  const {measure} = useSelector((state) => state.indicators);
+  const temperature = getTemperature(town.list[0].main.temp, measure);
+  const feeelsLikeTemp = getTemperature(town.list[0].main.feels_like, measure);
+
+  const classSize = classNames("town__temp", {
+    "town__temp_big": (showComponents === undefined),
+  });
 
   return (
     <div className="town">
@@ -14,7 +21,7 @@ function TownItem({ town, deleteTown, showComponents }) {
           {town.city.name}, {town.city.country}
         </p>
       )}
-      <p className="town__temp">
+      <p className={classSize}>
         {temperature}
         {measure}
       </p>
@@ -31,6 +38,11 @@ function TownItem({ town, deleteTown, showComponents }) {
         >
           x
         </button>
+      )}
+      {!showComponents && (
+        <p className="town__desc">
+          feels like {feeelsLikeTemp}{measure}
+        </p>
       )}
     </div>
   );

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import weatherService from "../../services/weatherService";
 
 const initialState = {
-  townWeather: null,
+  weatherForecast: null,
   isLoading: true,
   error: "",
 };
@@ -11,9 +11,8 @@ export const getWeatherByCoord = createAsyncThunk(
   "town/getWeatherByCoord",
   async (coord, { rejectWithWalue }) => {
     try {
-      const resultByCoord = await weatherService.getByCoord(coord);
-      console.log(resultByCoord);
-      const result = await weatherService.getByName(resultByCoord.name);
+      const result = await weatherService.getByCoord(coord);
+      console.log(result);
       return result;
     } catch (err) {
       console.log(err);
@@ -32,7 +31,7 @@ const townWeatherSlice = createSlice({
       state.isLoading = true;
     },
     [getWeatherByCoord.fulfilled]: (state, { payload }) => {
-      state.townWeather = payload;
+      state.weatherForecast = payload;
       state.isLoading = false;
     },
     [getWeatherByCoord.rejected]: (state, { payload }) => {

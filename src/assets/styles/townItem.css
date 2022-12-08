@@ -16,6 +16,10 @@
   color: rgb(21, 21, 127);
 }
 
+.town__temp_big{
+  font-size: 26px;
+}
+
 .town__img {
   width: 40px;
   height: 40px;

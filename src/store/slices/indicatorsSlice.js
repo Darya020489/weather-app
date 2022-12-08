@@ -4,8 +4,8 @@ const initialState = {
   measure: "°C",
 };
 
-const townListSlice = createSlice({
-  name: "townList",
+const indicatorsSlice = createSlice({
+  name: "indicators",
   initialState,
   reducers: {
     changeMeasure(state, { payload }) {
@@ -14,5 +14,5 @@ const townListSlice = createSlice({
   },
 });
 
-export default townListSlice.reducer;
-export const { changeMeasure } = townListSlice.actions;
+export default indicatorsSlice.reducer;
+export const { changeMeasure } = indicatorsSlice.actions;

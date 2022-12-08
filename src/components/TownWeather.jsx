@@ -10,19 +10,24 @@ import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
 import ShortInfo from "./town/ShortInfo";
 import Map from "./town/Map";
-import WeekWeather from "./town/WeekWeather";
-import DayWeather from "./town/DayWeather";
+import FiveDaysForecastList from "./town/FiveDaysForecastList";
+import ThreeHourlyForecastList from "./town/ThreeHourlyForecastList";
 import AdditionalInfo from "./town/AdditionalInfo";
 import Graph from "./town/Graph";
 
 function TownWeather() {
   const [coord, setCoord] = useState(null);
   const dispatch = useDispatch();
-  const { townWeather } = useSelector((state) => state.townWeather);
+  const { weatherForecast } = useSelector((state) => state.townWeather);
+  // console.log(townWeather);
+  useEffect(() => {
+    console.log(weatherForecast);
+  }, [weatherForecast])
   const { isLoading } = useSelector((state) => state.townWeather);
 
   // const params = useParams();
   // console.log(params);
+
   useEffect(() => {
     const pos = navigator.geolocation;
     pos.getCurrentPosition((loc) => {
@@ -38,6 +43,7 @@ function TownWeather() {
 
   const Town = styled.div`
     position: relative;
+    /* padding: 20px; */
     flex: 1;
     height: 100%;
     display: flex;
@@ -45,8 +51,8 @@ function TownWeather() {
     justify-content: start;
 
     h2 {
-      padding: 10px;
-      font-size: 16px;
+      padding-bottom: 15px;
+      font-size: 20px;
       text-align: left;
     }
   `;
@@ -58,14 +64,16 @@ function TownWeather() {
       ) : (
         <>
           {/* <Outlet /> */}
-          <h2 className="town-weather__header">{townWeather.city.name}</h2>
-          <Flex justify='space-around'>
+          <h2 className="town-weather__header">
+            {weatherForecast.city.name}, {weatherForecast.city.country}
+          </h2>
+          <Flex justify="space-between" align="start">
             <ShortInfo />
             <Map />
-            <WeekWeather />
+            <FiveDaysForecastList />
           </Flex>
-          <DayWeather />
-          <Flex justify='space-around'>
+          <ThreeHourlyForecastList />
+          <Flex justify="space-between" align="start">
             <AdditionalInfo />
             <Graph />
           </Flex>

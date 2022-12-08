@@ -1,26 +1,23 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "./styles/townList.css";
+import "../assets/styles/townList.css";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
 import InputError from "./errors/inputError";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMeasure } from "../store/slices/townListSlice";
+import { changeMeasure } from "../store/slices/indicatorsSlice";
 import weatherService from "../services/weatherService";
 import classNames from "classnames";
-import AsideLoader from './loaders/AsideLoader';
+import AsideLoader from "./loaders/AsideLoader";
 
 function TownList() {
   const ENTER_KEY_CODE = 13;
-  const townsArr = useMemo(
-    () => ["Paris", "Moscow", "Cairo"],
-    []
-  );
+  const townsArr = useMemo(() => ["Paris", "Moscow", "Cairo"], []);
   const [townsWeather, setTownsWeather] = useState([]);
   const [addingCity, setAddingCity] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [showError, setShowError] = useState(false);
   const dispatch = useDispatch();
-  const { measure } = useSelector((state) => state.townList);
+  const { measure } = useSelector((state) => state.indicators);
   let { theme } = useSelector((state) => state.theme);
 
   useEffect(() => {
@@ -87,7 +84,7 @@ function TownList() {
     : "town-list__input";
 
   const classTownListHeader = classNames("town-list__header", {
-    "town-list__header_dark": (theme === "dark"),
+    "town-list__header_dark": theme === "dark",
   });
 
   return (
@@ -104,7 +101,7 @@ function TownList() {
             ></TownItem>
           ))
         ) : (
-          <AsideLoader/>
+          <AsideLoader />
         )}
       </Flex>
       <Flex>

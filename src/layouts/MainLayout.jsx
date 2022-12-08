@@ -3,10 +3,10 @@ import TownList from "../components/TownList";
 import Flex from "../components/Flex";
 import CustomizedSwitches from "../components/SwitcherTheme";
 import { changeTheme } from "../store/slices/themeSlice";
-import TownWeather from "../components/TownWeather";
+import TownWeatherWrap from "../components/TownWeatherWrap";
 import { useDispatch, useSelector } from "react-redux";
 import DateContainer from "../components/DateContainer";
-import logo from "../img/logo.png";
+import logo from "../assets/images/logo.png";
 // import styled from "styled-components";
 import styled from "@emotion/styled";
 
@@ -26,7 +26,7 @@ function MainLayout() {
     }
 
     .main__img {
-      width: 50px;
+      width: 45px;
     }
   `;
 
@@ -50,7 +50,7 @@ function MainLayout() {
       </Flex>
       <Flex align="start">
         <TownList></TownList>
-        <TownWeather></TownWeather>
+        <TownWeatherWrap></TownWeatherWrap>
       </Flex>
     </MainContainer>
   );

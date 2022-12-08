@@ -19,8 +19,9 @@
 }
 
 .town-list__adding-btn {
-  margin-right: 25px;
+  margin-right: 20px;
   padding: 5px;
+  white-space: nowrap;
   border: none;
   border-radius: 5px;
   color: white;
@@ -68,7 +69,7 @@
   display: none;
   width: 20px;
   height: 20px;
-  background-image: url("../../img/check-mark-icon.svg");
+  background-image: url("../images/check-mark-icon.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -88,3 +89,7 @@
   border-radius: 5px;
   background-color: rgb(55, 130, 220);
 }
+
+
+
+

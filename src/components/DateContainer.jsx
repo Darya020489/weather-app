@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 import Flex from "./Flex";
 import styled from "@emotion/styled";
 // import styled from "styled-components";
-import clock from "../img/clock.svg";
+import clock from "../assets/images/clock.svg";
 
 function DateContainer() {
   const [time, setTime] = useState(

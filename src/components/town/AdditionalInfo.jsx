@@ -1,9 +1,18 @@
-import React from 'react'
+import React from 'react';
+import styled from '@emotion/styled';
+
+const MoreInfo = styled.div`
+  
+`;
 
 function AdditionalInfo() {
   return (
-    <div>additionalInfo</div>
+    <MoreInfo>
+      
+      
+      
+      </MoreInfo>
   )
 }
 
-export default AdditionalInfo
+export default AdditionalInfo;

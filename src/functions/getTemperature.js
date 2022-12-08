@@ -1,5 +1,3 @@
-export const getTemperature = (town, measure) => {
-  return measure === "°F"
-    ? Math.round(town.list[0].main.temp)
-    : Math.round(town.list[0].main.temp - 273.15);
+export const getTemperature = (temp, measure) => {
+  return measure === "°F" ? Math.round(temp) : Math.round(temp - 273.15);
 };
