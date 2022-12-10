@@ -28,6 +28,7 @@ function TownWeatherWrap() {
   const TownWeatherWrapper = styled.div`
     padding: 20px;
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: flex-start;
 
@@ -46,14 +47,11 @@ function TownWeatherWrap() {
 
   return (
     <TownWeatherWrapper>
+      <Flex>
+        <input type="text" placeholder="Enter new city name" />
+        <button className="">Change city</button>
+      </Flex>
       <TownWeather />
-      {
-        <Flex>
-          <input type="text" 
-          placeholder='Enter new city name'/>
-          <button className="">Change city</button>
-        </Flex>
-      }
     </TownWeatherWrapper>
   );
 }

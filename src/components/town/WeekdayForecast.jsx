@@ -1,7 +1,6 @@
 import React from "react";
 import { DateTime } from "luxon";
 import styled from "@emotion/styled";
-import Flex from "../Flex";
 import {useSelector} from 'react-redux';
 import { getTemperature } from "../../functions/getTemperature";
 
@@ -49,7 +48,6 @@ function WeekdayForecast({ day }) {
   `;
   return (
     <DayWeather>
-      {/* <Flex justify="space-between"> */}
         <p className="weekday">{weekdays[weekdayNumber]}</p>
         <img
           className="weekday-img"
@@ -58,7 +56,6 @@ function WeekdayForecast({ day }) {
         />
         <p className="temp-max">{tempMax}{measure}</p>
         <p className="temp-min">{tempMin}{measure}</p>
-      {/* </Flex> */}
     </DayWeather>
   );
 }

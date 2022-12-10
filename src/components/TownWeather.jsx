@@ -43,8 +43,7 @@ function TownWeather() {
 
   const Town = styled.div`
     position: relative;
-    /* padding: 20px; */
-    flex: 1;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;

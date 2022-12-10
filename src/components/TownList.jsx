@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, memo } from "react";
 import "../assets/styles/townList.css";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
@@ -157,4 +157,4 @@ function TownList() {
   );
 }
 
-export default TownList;
+export default memo(TownList);

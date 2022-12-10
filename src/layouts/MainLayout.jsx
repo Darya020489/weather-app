@@ -12,10 +12,9 @@ import styled from "@emotion/styled";
 
 function MainLayout() {
   const dispatch = useDispatch();
-  const theme = useSelector((state) => state.theme.theme);
+  // const theme = useSelector((state) => state.theme.theme);
   const switchTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    dispatch(changeTheme(nextTheme));
+    dispatch(changeTheme());
   };
 
   const MainContainer = styled.section`
@@ -48,7 +47,7 @@ function MainLayout() {
         <CustomizedSwitches switchTheme={switchTheme} />
         <DateContainer />
       </Flex>
-      <Flex align="start">
+      <Flex justify="space-between" align="start">
         <TownList></TownList>
         <TownWeatherWrap></TownWeatherWrap>
       </Flex>
