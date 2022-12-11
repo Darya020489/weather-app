@@ -4,30 +4,28 @@ import Flex from "../components/Flex";
 import CustomizedSwitches from "../components/SwitcherTheme";
 import { changeTheme } from "../store/slices/themeSlice";
 import TownWeatherWrap from "../components/TownWeatherWrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import DateContainer from "../components/DateContainer";
 import logo from "../assets/images/logo.png";
-// import styled from "styled-components";
-import styled from "@emotion/styled";
+import styled from "styled-components";
+
+const MainContainer = styled.section`
+.main__header {
+  padding: 10px;
+  font-size: 24px;
+  text-shadow: 1px 1px 2px grey;
+}
+
+.main__img {
+  width: 45px;
+}
+`;
 
 function MainLayout() {
   const dispatch = useDispatch();
-  // const theme = useSelector((state) => state.theme.theme);
   const switchTheme = () => {
     dispatch(changeTheme());
   };
-
-  const MainContainer = styled.section`
-    .main__header {
-      padding: 10px;
-      font-size: 24px;
-      text-shadow: 1px 1px 2px grey;
-    }
-
-    .main__img {
-      width: 45px;
-    }
-  `;
 
   return (
     <MainContainer>
@@ -47,7 +45,7 @@ function MainLayout() {
         <CustomizedSwitches switchTheme={switchTheme} />
         <DateContainer />
       </Flex>
-      <Flex justify="space-between" align="start">
+      <Flex align="start">
         <TownList></TownList>
         <TownWeatherWrap></TownWeatherWrap>
       </Flex>

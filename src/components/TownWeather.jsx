@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useParams, Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getWeatherByCoord } from "../store/slices/townWeatherSlice";
-// import styled from "styled-components";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
 import ShortInfo from "./town/ShortInfo";
@@ -15,15 +14,30 @@ import ThreeHourlyForecastList from "./town/ThreeHourlyForecastList";
 import AdditionalInfo from "./town/AdditionalInfo";
 import Graph from "./town/Graph";
 
+const Town = styled.div`
+position: relative;
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
+justify-content: start;
+
+h2 {
+  padding-bottom: 15px;
+  font-size: 20px;
+  text-align: left;
+}
+`;
+
 function TownWeather() {
   const [coord, setCoord] = useState(null);
   const dispatch = useDispatch();
-  const { weatherForecast } = useSelector((state) => state.townWeather);
+  const weatherForecast = useSelector((state) => state.townWeather.weatherForecast);
   // console.log(townWeather);
   useEffect(() => {
     console.log(weatherForecast);
   }, [weatherForecast])
-  const { isLoading } = useSelector((state) => state.townWeather);
+  const isLoading = useSelector((state) => state.townWeather.isLoading);
 
   // const params = useParams();
   // console.log(params);
@@ -41,21 +55,6 @@ function TownWeather() {
     }
   }, [coord, dispatch]);
 
-  const Town = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-
-    h2 {
-      padding-bottom: 15px;
-      font-size: 20px;
-      text-align: left;
-    }
-  `;
-
   return (
     <Town>
       {isLoading ? (
@@ -68,13 +67,13 @@ function TownWeather() {
           </h2>
           <Flex justify="space-between" align="start">
             <ShortInfo />
-            <Map />
+            <Graph />
             <FiveDaysForecastList />
           </Flex>
           <ThreeHourlyForecastList />
           <Flex justify="space-between" align="start">
             <AdditionalInfo />
-            <Graph />
+            <Map />
           </Flex>
         </>
       )}

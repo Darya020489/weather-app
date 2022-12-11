@@ -1,10 +1,26 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import React from "react";
 import { useSelector } from "react-redux";
 import { getTemperature } from "../../functions/getTemperature";
 
+const ThreeHourlyItem = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 15px 0px;
+font-size: 12px;
+font-weight: 700;
+
+img {
+  width: 30px;
+}
+.threeHourlyItem__time {
+  color: grey;
+}
+`;
+
 function ThreeHourlyForecastItem({ weather }) {
-  const { measure } = useSelector((state) => state.indicators);
+  const measure = useSelector((state) => state.indicators.measure);
   const temperature = getTemperature(weather.main.temp, measure);
 
   const date = weather.dt_txt;
@@ -14,22 +30,6 @@ function ThreeHourlyForecastItem({ weather }) {
   const weatherNow = date === dateNow ? true : false;
 
   const time = date.split(" ")[1].slice(0, 5);
-
-  const ThreeHourlyItem = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 15px 0px;
-    font-size: 12px;
-    font-weight: 700;
-
-    img {
-      width: 30px;
-    }
-    .threeHourlyItem__time {
-      color: grey;
-    }
-  `;
 
   return (
     <ThreeHourlyItem>

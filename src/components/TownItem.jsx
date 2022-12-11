@@ -6,7 +6,7 @@ import classNames from "classnames";
 
 function TownItem({ town, deleteTown, showComponents }) {
   console.log(town);
-  const {measure} = useSelector((state) => state.indicators);
+  const measure = useSelector((state) => state.indicators.measure);
   const temperature = getTemperature(town.list[0].main.temp, measure);
   const feeelsLikeTemp = getTemperature(town.list[0].main.feels_like, measure);
 

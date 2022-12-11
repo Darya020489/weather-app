@@ -17,8 +17,8 @@ function TownList() {
   const [inputValue, setInputValue] = useState("");
   const [showError, setShowError] = useState(false);
   const dispatch = useDispatch();
-  const { measure } = useSelector((state) => state.indicators);
-  let { theme } = useSelector((state) => state.theme);
+  const measure = useSelector((state) => state.indicators.measure);
+  let theme = useSelector((state) => state.theme.theme);
 
   useEffect(() => {
     townsArr.forEach(async (town) => {

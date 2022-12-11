@@ -1,6 +1,6 @@
 .town-list {
-  /* width: 20%; */
-  max-width: 200px;
+  width: 20%;
+  /* max-width: 200px; */
   height: 100%;
   padding: 15px;
   display: flex;
@@ -75,8 +75,9 @@
 }
 
 .town-list__input {
-  margin-right: 20px;
+  margin-right: 10px;
   padding: 3px;
+  max-width: 130px;
 }
 
 .town-list__input-error {
