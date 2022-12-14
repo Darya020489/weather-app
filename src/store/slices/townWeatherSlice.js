@@ -8,16 +8,31 @@ const initialState = {
 };
 
 export const getWeatherByCoord = createAsyncThunk(
-  "town/getWeatherByCoord",
-  async (coord, { rejectWithWalue }) => {
+  "townWeather/getWeatherByCoord",
+  async (coord, { rejectWithValue }) => {
     try {
       const result = await weatherService.getByCoord(coord);
       console.log(result);
       return result;
     } catch (err) {
       console.log(err);
-      console.log(rejectWithWalue(err));
-      return rejectWithWalue(err);
+      console.log(rejectWithValue(err));
+      return rejectWithValue(err);
+    }
+  }
+);
+
+export const getWeatherByName = createAsyncThunk(
+  "townWeather/getWeatherByName",
+  async (name, { rejectWithValue }) => {
+    try {
+      const result = await weatherService.getByName(name);
+      console.log(result);
+      return result;
+    } catch (err) {
+      console.log(err);
+      console.log(rejectWithValue(err));
+      return rejectWithValue(err);
     }
   }
 );
@@ -35,6 +50,17 @@ const townWeatherSlice = createSlice({
       state.isLoading = false;
     },
     [getWeatherByCoord.rejected]: (state, { payload }) => {
+      state.error = payload.message;
+    },
+
+    [getWeatherByName.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getWeatherByName.fulfilled]: (state, { payload }) => {
+      state.weatherForecast = payload;
+      state.isLoading = false;
+    },
+    [getWeatherByName.rejected]: (state, { payload }) => {
       state.error = payload.message;
     },
   },

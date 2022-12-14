@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState, memo } from "react";
-import "../assets/styles/townList.css";
+// import "../assets/styles/townList.css";
+import styled from "styled-components";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
 import InputError from "./errors/inputError";
@@ -8,6 +9,99 @@ import { changeMeasure } from "../store/slices/indicatorsSlice";
 import weatherService from "../services/weatherService";
 import classNames from "classnames";
 import AsideLoader from "./loaders/AsideLoader";
+import checkMarkIcon from "../assets/images/check-mark-icon.svg";
+
+const CityList = styled.aside`
+  width: 20%;
+  /* max-width: 200px; */
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(144, 141, 141, 0.829);
+
+  .town-list__header {
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+
+  .town-list__header_dark {
+    color: white;
+    background-color: black;
+  }
+
+  .town-list__adding-btn {
+    margin-right: 20px;
+    padding: 5px;
+    white-space: nowrap;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: rgb(55, 131, 221);
+  }
+
+  .town-list__input {
+    margin-right: 10px;
+    padding: 3px;
+    max-width: 130px;
+  }
+
+  .town-list__input-error {
+    border-color: red;
+  }
+
+  .town-list__add-city-btn {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(55, 130, 220);
+  }
+
+  .checkbox {
+    margin-right: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .checkbox__element {
+    margin-right: 10px;
+    margin-left: 5px;
+    /* margin-bottom: 80px; */
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .checkbox__element:checked ~ .checkbox__decorate::after {
+    display: block;
+  }
+
+  .checkbox__decorate {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgb(55, 130, 221);
+  }
+
+  .checkbox__decorate::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 20px;
+    height: 20px;
+    background-image: url(${checkMarkIcon});
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+`;
 
 function TownList() {
   const ENTER_KEY_CODE = 13;
@@ -88,7 +182,7 @@ function TownList() {
   });
 
   return (
-    <aside className="town-list">
+    <CityList className="town-list">
       <h2 className={classTownListHeader}>Today</h2>
       <Flex direction="column" className="town-list__body">
         {townsWeather.length ? (
@@ -153,7 +247,7 @@ function TownList() {
         </Flex>
       )}
       {showError && <InputError />}
-    </aside>
+    </CityList>
   );
 }
 

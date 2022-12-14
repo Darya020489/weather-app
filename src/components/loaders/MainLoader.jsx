@@ -5,6 +5,7 @@ import Flex from "../Flex";
 const Spinner = styled.div`
   position: absolute;
   top: 250px;
+  right: 50%;
   width: 15.7px;
   height: 15.7px;
   div {

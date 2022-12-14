@@ -6,7 +6,7 @@ import App from "./App";
 import { Provider } from "react-redux";
 import { store } from "./store/index.js";
 // import './fonts/lcdnova.ttf';
-import './assets/styles/base.css';
+import './assets/styles/fonts.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

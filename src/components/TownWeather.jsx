@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams, Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getWeatherByCoord } from "../store/slices/townWeatherSlice";
+import { getWeatherByCoord, getWeatherByName } from "../store/slices/townWeatherSlice";
 import styled from "styled-components";
 import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
@@ -15,28 +15,43 @@ import AdditionalInfo from "./town/AdditionalInfo";
 import Graph from "./town/Graph";
 
 const Town = styled.div`
-position: relative;
-width: 100%;
-height: 100%;
-display: flex;
-flex-direction: column;
-justify-content: start;
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: start;
 
-h2 {
-  padding-bottom: 15px;
-  font-size: 20px;
-  text-align: left;
-}
+  h2 {
+    padding-bottom: 15px;
+    font-size: 20px;
+    text-align: left;
+  }
+
+  input {
+    margin-right: 20px;
+    padding: 3px;
+  }
+
+  button {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: rgb(55, 130, 220);
+  }
 `;
 
 function TownWeather() {
   const [coord, setCoord] = useState(null);
+  const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
-  const weatherForecast = useSelector((state) => state.townWeather.weatherForecast);
-  // console.log(townWeather);
-  useEffect(() => {
-    console.log(weatherForecast);
-  }, [weatherForecast])
+  const weatherForecast = useSelector(
+    (state) => state.townWeather.weatherForecast
+  );
+
   const isLoading = useSelector((state) => state.townWeather.isLoading);
 
   // const params = useParams();
@@ -55,13 +70,30 @@ function TownWeather() {
     }
   }, [coord, dispatch]);
 
+  const changeCity = async () => {
+    dispatch(getWeatherByName(inputValue));
+  };
+
+  useEffect(() => {
+    console.log(inputValue);
+  }, [inputValue]);
+
   return (
     <Town>
+      {/* <Outlet /> */}
+      <Flex margin="0 0 20px 0" justify="start">
+        <input
+          type="text"
+          placeholder="Enter new city name"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button onClick={changeCity}>Change city</button>
+      </Flex>
       {isLoading ? (
         <MainLoader />
       ) : (
         <>
-          {/* <Outlet /> */}
           <h2 className="town-weather__header">
             {weatherForecast.city.name}, {weatherForecast.city.country}
           </h2>

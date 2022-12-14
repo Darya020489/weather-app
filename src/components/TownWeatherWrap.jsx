@@ -1,17 +1,17 @@
-import React from "react";
+// import React from "react";
 import TownWeather from "./TownWeather";
-import Flex from "./Flex";
-import { useSelector } from "react-redux";
+// import Flex from "./Flex";
+// import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const TownWeatherWrapper = styled.div`
-padding: 20px;
+/* padding: 20px;
 display: flex;
 flex: 1;
 flex-direction: column;
-align-items: flex-start;
+align-items: flex-start; */
 
-input {
+/* input {
   margin-right: 20px;
   padding: 3px;
 }
@@ -22,8 +22,8 @@ button {
   border-radius: 5px;
   color: white;
   background-color: rgb(55, 130, 220);
-}
-`;
+} */
+ `; 
 
 function TownWeatherWrap() {
   // const isLoading = useSelector((state) => state.townWeather.isLoading);
@@ -50,10 +50,10 @@ function TownWeatherWrap() {
 
   return (
     <TownWeatherWrapper>
-      <Flex margin="0 0 20px 0">
+      {/* <Flex margin="0 0 20px 0">
         <input type="text" placeholder="Enter new city name" />
         <button className="">Change city</button>
-      </Flex>
+      </Flex> */}
       <TownWeather />
     </TownWeatherWrapper>
   );

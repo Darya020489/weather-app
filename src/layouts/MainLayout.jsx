@@ -3,7 +3,7 @@ import TownList from "../components/TownList";
 import Flex from "../components/Flex";
 import CustomizedSwitches from "../components/SwitcherTheme";
 import { changeTheme } from "../store/slices/themeSlice";
-import TownWeatherWrap from "../components/TownWeatherWrap";
+import TownWeather from "../components/TownWeather";
 import { useDispatch} from "react-redux";
 import DateContainer from "../components/DateContainer";
 import logo from "../assets/images/logo.png";
@@ -47,7 +47,7 @@ function MainLayout() {
       </Flex>
       <Flex align="start">
         <TownList></TownList>
-        <TownWeatherWrap></TownWeatherWrap>
+        <TownWeather></TownWeather>
       </Flex>
     </MainContainer>
   );

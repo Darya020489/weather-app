@@ -9,6 +9,10 @@ import wind from "../../assets/images/additionalInfoIcons/wind.svg";
 import clouds from "../../assets/images/additionalInfoIcons/clouds.svg";
 import humidity from "../../assets/images/additionalInfoIcons/humidity.svg";
 import visibility from "../../assets/images/additionalInfoIcons/visibility.svg";
+// import themeStyles from '../../themeStyles/themeStyles';
+
+// const theme = useSelector(state => state.theme);
+// const styles = theme === 'dark' ? themeStyles.darkStyles : themeStyles.lightStyles;
 
 const MoreInfo = styled.div`
 h4{
