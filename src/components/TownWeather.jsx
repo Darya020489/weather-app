@@ -3,7 +3,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams, Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getWeatherByCoord, getWeatherByName } from "../store/slices/townWeatherSlice";
+import {
+  getWeatherByCoord,
+  getWeatherByName,
+} from "../store/slices/townWeatherSlice";
 import styled from "styled-components";
 import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
@@ -45,6 +48,7 @@ const Town = styled.div`
 `;
 
 function TownWeather() {
+  const ENTER_KEY_CODE = 13;
   const [coord, setCoord] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
@@ -71,12 +75,19 @@ function TownWeather() {
   }, [coord, dispatch]);
 
   const changeCity = async () => {
+    if (inputValue.toLowerCase() === weatherForecast.city.name.toLowerCase())
+      return;
     dispatch(getWeatherByName(inputValue));
   };
 
-  useEffect(() => {
-    console.log(inputValue);
-  }, [inputValue]);
+  const changeCityByEnter = async (e) => {
+    if (
+      e.keyCode !== ENTER_KEY_CODE ||
+      inputValue.toLowerCase() === weatherForecast.city.name.toLowerCase()
+    )
+      return;
+    dispatch(getWeatherByName(inputValue));
+  };
 
   return (
     <Town>
@@ -87,6 +98,7 @@ function TownWeather() {
           placeholder="Enter new city name"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => changeCityByEnter(e)}
         />
         <button onClick={changeCity}>Change city</button>
       </Flex>
@@ -104,7 +116,8 @@ function TownWeather() {
           </Flex>
           <ThreeHourlyForecastList />
           <Flex justify="space-between" align="start">
-            <AdditionalInfo />
+          <AdditionalInfo />
+            
             <Map />
           </Flex>
         </>

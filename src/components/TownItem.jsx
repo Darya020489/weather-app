@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo, memo} from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { getTemperature } from "../functions/getTemperature";
@@ -113,4 +113,4 @@ function TownItem({ town, deleteTown, showComponents }) {
     </CityItem>
   );
 }
-export default TownItem;
+export default memo(TownItem);

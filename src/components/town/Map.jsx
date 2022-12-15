@@ -1,15 +1,13 @@
-import React from 'react'
-import styled from 'styled-components';
+import React from "react";
 
-const Card = styled.div`
-  min-width: 150px;
-  max-width: 200px;
-`;
 
-function Map() {
+function Graph() {
+
+
+
   return (
-    <Card>map</Card>
-  )
+<></>
+  );
 }
 
-export default Map;
+export default Graph;
