@@ -6,6 +6,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 
 const HourlyForecastList = styled.div`
+margin-bottom: 20px;
 /* padding: 10px; */
 display: flex;
 /* flex-direction: column; */

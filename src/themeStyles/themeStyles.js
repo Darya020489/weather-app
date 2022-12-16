@@ -1,6 +1,6 @@
 const themeStyles = {
 darkStyles: {
-background: 'black',
+background: 'grey',
 mainColor: 'yellow',
 secondaryColor: 'rgba(86, 78, 78, 0.829)', //grey
     tertiaryColor: 'rgb(55, 131, 221)', //blue

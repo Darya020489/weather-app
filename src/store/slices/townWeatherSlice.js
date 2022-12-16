@@ -40,14 +40,21 @@ export const getWeatherByName = createAsyncThunk(
 const townWeatherSlice = createSlice({
   name: "townWeather",
   initialState,
-  reducers: {},
+  reducers: {
+    setWeatherForecast(state, {payload}){
+      state.weatherForecast = payload;
+      state.isLoading = false;
+    },
+  },
   extraReducers: {
     [getWeatherByCoord.pending]: (state) => {
       state.isLoading = true;
     },
     [getWeatherByCoord.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
+      console.log(payload);
       state.isLoading = false;
+      localStorage.setItem('weatherForecast', JSON.stringify(payload));
     },
     [getWeatherByCoord.rejected]: (state, { payload }) => {
       state.error = payload.message;
@@ -59,6 +66,7 @@ const townWeatherSlice = createSlice({
     [getWeatherByName.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
       state.isLoading = false;
+      localStorage.setItem('weatherForecast', JSON.stringify(payload));
     },
     [getWeatherByName.rejected]: (state, { payload }) => {
       state.error = payload.message;
@@ -67,3 +75,4 @@ const townWeatherSlice = createSlice({
 });
 
 export default townWeatherSlice.reducer;
+export const {setWeatherForecast} = townWeatherSlice.actions;

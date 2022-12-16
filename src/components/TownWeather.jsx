@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams, Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { setWeatherForecast } from "../store/slices/townWeatherSlice";
+import { changeError } from "../store/slices/errorsSlice";
 import {
   getWeatherByCoord,
   getWeatherByName,
@@ -11,6 +13,7 @@ import styled from "styled-components";
 import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
 import ShortInfo from "./town/ShortInfo";
+import InputError from "./errors/InputError";
 import Map from "./town/Map";
 import FiveDaysForecastList from "./town/FiveDaysForecastList";
 import ThreeHourlyForecastList from "./town/ThreeHourlyForecastList";
@@ -28,14 +31,22 @@ const Town = styled.div`
   justify-content: start;
 
   h2 {
+    margin-top: 20px;
     padding-bottom: 15px;
     font-size: 20px;
     text-align: left;
   }
 
-  input {
+  .town-weather__input {
     margin-right: 20px;
     padding: 3px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid black;
+
+    &-error {
+      border-color: red;
+    }
   }
 
   button {
@@ -51,6 +62,7 @@ function TownWeather() {
   const ENTER_KEY_CODE = 13;
   const [coord, setCoord] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [showError, setShowError] = useState(false);
   const dispatch = useDispatch();
   const weatherForecast = useSelector(
     (state) => state.townWeather.weatherForecast
@@ -62,10 +74,15 @@ function TownWeather() {
   // console.log(params);
 
   useEffect(() => {
-    const pos = navigator.geolocation;
-    pos.getCurrentPosition((loc) => {
-      setCoord({ lat: loc.coords.latitude, lon: loc.coords.longitude });
-    });
+    const currentForecast = JSON.parse(localStorage.getItem("weatherForecast"));
+    if (currentForecast) {
+      dispatch(setWeatherForecast(currentForecast));
+    } else {
+      const pos = navigator.geolocation;
+      pos.getCurrentPosition((loc) => {
+        setCoord({ lat: loc.coords.latitude, lon: loc.coords.longitude });
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -75,25 +92,44 @@ function TownWeather() {
   }, [coord, dispatch]);
 
   const changeCity = async () => {
-    if (inputValue.toLowerCase() === weatherForecast.city.name.toLowerCase())
-      return;
-    dispatch(getWeatherByName(inputValue));
+    if (inputValue.toLowerCase() === weatherForecast.city.name.toLowerCase()) {
+      dispatch(changeError("alreadyExists"));
+      setShowError(true);
+    } else if (inputValue.trim() === "") {
+      dispatch(changeError("emptyEnter"));
+      setShowError(true);
+    } else {
+      dispatch(getWeatherByName(inputValue));
+      setShowError(false);
+      setInputValue("");
+    }
   };
 
   const changeCityByEnter = async (e) => {
-    if (
-      e.keyCode !== ENTER_KEY_CODE ||
-      inputValue.toLowerCase() === weatherForecast.city.name.toLowerCase()
-    )
-      return;
-    dispatch(getWeatherByName(inputValue));
+    if (e.keyCode !== ENTER_KEY_CODE) return;
+    if (inputValue.toLowerCase() === weatherForecast.city.name.toLowerCase()) {
+      dispatch(changeError("alreadyExists"));
+      setShowError(true);
+    } else if (inputValue.trim() === "") {
+      dispatch(changeError("emptyEnter"));
+      setShowError(true);
+    } else {
+      dispatch(getWeatherByName(inputValue));
+      setShowError(false);
+      setInputValue("");
+    }
   };
+
+  const inputClass = showError
+    ? "town-weather__input town-weather__input-error"
+    : "town-weather__input";
 
   return (
     <Town>
       {/* <Outlet /> */}
-      <Flex margin="0 0 20px 0" justify="start">
+      <Flex justify="start">
         <input
+          className={inputClass}
           type="text"
           placeholder="Enter new city name"
           value={inputValue}
@@ -102,6 +138,7 @@ function TownWeather() {
         />
         <button onClick={changeCity}>Change city</button>
       </Flex>
+      {showError && <InputError />}
       {isLoading ? (
         <MainLoader />
       ) : (
@@ -116,8 +153,8 @@ function TownWeather() {
           </Flex>
           <ThreeHourlyForecastList />
           <Flex justify="space-between" align="start">
-          <AdditionalInfo />
-            
+            <AdditionalInfo />
+
             <Map />
           </Flex>
         </>

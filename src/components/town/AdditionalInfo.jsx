@@ -20,7 +20,7 @@ function AdditionalInfo() {
   const MoreInfo = styled.div`
   background: ${styles.background};
     h4 {
-      margin-top: 10px;
+      /* margin-top: 10px; */
       text-align: left;
     }
     img {

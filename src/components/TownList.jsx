@@ -3,8 +3,9 @@ import React, { useEffect, useMemo, useState, memo } from "react";
 import styled from "styled-components";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
-import InputError from "./errors/inputError";
+import InputError from "./errors/InputError";
 import { useDispatch, useSelector } from "react-redux";
+import { changeError } from "../store/slices/errorsSlice";
 import { changeMeasure } from "../store/slices/indicatorsSlice";
 import weatherService from "../services/weatherService";
 import classNames from "classnames";
@@ -44,10 +45,13 @@ const CityList = styled.aside`
     margin-right: 10px;
     padding: 3px;
     max-width: 130px;
-  }
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid black;
 
-  .town-list__input-error {
-    border-color: red;
+    &-error {
+      border-color: red;
+    }
   }
 
   .town-list__add-city-btn {
@@ -105,7 +109,6 @@ const CityList = styled.aside`
 
 function TownList() {
   const ENTER_KEY_CODE = 13;
-  const townsArr = useMemo(() => ["Paris", "Moscow", "Cairo"], []);
   const [townsWeather, setTownsWeather] = useState([]);
   const [addingCity, setAddingCity] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -114,17 +117,24 @@ function TownList() {
   const measure = useSelector((state) => state.indicators.measure);
   let theme = useSelector((state) => state.theme.theme);
 
+  const townsArr = useMemo(() => ["Paris", "Moscow", "Cairo"], []);
+
   useEffect(() => {
-    townsArr.forEach(async (town) => {
-      console.log(town);
-      try {
-        const result = await weatherService.getByName(town);
-        setTownsWeather((townsWeather) => [...townsWeather, result]);
-        console.log(result);
-      } catch (err) {
-        console.log(err);
-      }
-    });
+    const currentList = JSON.parse(localStorage.getItem("cityList"));
+    if (currentList) {
+      setTownsWeather(currentList);
+    } else {
+      townsArr.forEach(async (town) => {
+        console.log(town);
+        try {
+          const result = await weatherService.getByName(town);
+          setTownsWeather((townsWeather) => [...townsWeather, result]);
+          console.log(result);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }
   }, [townsArr]);
 
   const deleteTown = (id) => {
@@ -140,6 +150,10 @@ function TownList() {
       (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
     );
     if (townInTheList) {
+      dispatch(changeError("alreadyExists"));
+      setShowError(true);
+    } else if (inputValue.trim() === "") {
+      dispatch(changeError("emptyEnter"));
       setShowError(true);
     } else {
       try {
@@ -159,6 +173,10 @@ function TownList() {
       (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
     );
     if (townInList) {
+      dispatch(changeError("alreadyExists"));
+      setShowError(true);
+    } else if (inputValue.trim() === "") {
+      dispatch(changeError("emptyEnter"));
       setShowError(true);
     } else {
       try {
@@ -172,6 +190,10 @@ function TownList() {
       }
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("cityList", JSON.stringify(townsWeather));
+  }, [townsWeather]);
 
   const inputClass = showError
     ? "town-list__input town-list__input-error"

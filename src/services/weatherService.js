@@ -1,5 +1,5 @@
 import api from "../api/axios";
-const key = "094911f9a2e4dfb34a28d9acedfe2d20";
+const key = "c3ca29e22bec12ca4a4e142f1af90e6d";
 
 const weatherService = {
   async getByName(name) {
