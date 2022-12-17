@@ -259,6 +259,7 @@ function TownList() {
           <input
             type="text"
             placeholder="Enter the city"
+            autoFocus="autofocus"
             className={inputClass}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => addNewCityByEnter(e)}

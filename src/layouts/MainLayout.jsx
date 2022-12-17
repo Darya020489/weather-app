@@ -45,7 +45,7 @@ function MainLayout() {
         <CustomizedSwitches switchTheme={switchTheme} />
         <DateContainer />
       </Flex>
-      <Flex align="start">
+      <Flex justify="space-between" align="start">
         <TownList></TownList>
         <TownWeather></TownWeather>
       </Flex>

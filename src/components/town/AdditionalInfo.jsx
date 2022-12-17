@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import { useSelector } from "react-redux";
 // import styled from 'styled-components';
 import styled from "@emotion/styled";
@@ -36,7 +36,7 @@ function AdditionalInfo() {
       color: rgb(55, 130, 220);
     }
   `;
-
+console.log('info');
 
 
 
@@ -121,4 +121,4 @@ function AdditionalInfo() {
   );
 }
 
-export default AdditionalInfo;
+export default memo(AdditionalInfo);

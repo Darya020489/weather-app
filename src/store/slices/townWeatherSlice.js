@@ -4,6 +4,7 @@ import weatherService from "../../services/weatherService";
 const initialState = {
   weatherForecast: null,
   isLoading: true,
+  // townImage: "",
   error: "",
 };
 
@@ -37,13 +38,31 @@ export const getWeatherByName = createAsyncThunk(
   }
 );
 
+// export const getTownImage = createAsyncThunk(
+//   "townWeather/getTownImage",
+//   async (name, { rejectWithValue }) => {
+//     try {
+//       const result = await weatherService.getByName(name);
+//       console.log(result);
+//       return result;
+//     } catch (err) {
+//       console.log(err);
+//       console.log(rejectWithValue(err));
+//       return rejectWithValue(err);
+//     }
+//   }
+// );
+
 const townWeatherSlice = createSlice({
   name: "townWeather",
   initialState,
   reducers: {
-    setWeatherForecast(state, {payload}){
+    setWeatherForecast(state, { payload }) {
       state.weatherForecast = payload;
       state.isLoading = false;
+    },
+    setTownImage(state, { payload }) {
+      state.townImage = payload;
     },
   },
   extraReducers: {
@@ -54,7 +73,7 @@ const townWeatherSlice = createSlice({
       state.weatherForecast = payload;
       console.log(payload);
       state.isLoading = false;
-      localStorage.setItem('weatherForecast', JSON.stringify(payload));
+      localStorage.setItem("weatherForecast", JSON.stringify(payload));
     },
     [getWeatherByCoord.rejected]: (state, { payload }) => {
       state.error = payload.message;
@@ -66,7 +85,7 @@ const townWeatherSlice = createSlice({
     [getWeatherByName.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
       state.isLoading = false;
-      localStorage.setItem('weatherForecast', JSON.stringify(payload));
+      localStorage.setItem("weatherForecast", JSON.stringify(payload));
     },
     [getWeatherByName.rejected]: (state, { payload }) => {
       state.error = payload.message;
@@ -75,4 +94,4 @@ const townWeatherSlice = createSlice({
 });
 
 export default townWeatherSlice.reducer;
-export const {setWeatherForecast} = townWeatherSlice.actions;
+export const { setWeatherForecast } = townWeatherSlice.actions;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo, memo} from "react";
 import { useSelector } from "react-redux";
 import ThreeHourlyForecastItem from "./ThreeHourlyForecastItem";
 import styled from "styled-components";
@@ -18,6 +18,7 @@ box-shadow: 5px 4px 8px 0px rgba(34, 60, 80, 0.2);
 function ThreeHourlyForecastList() {
   const list = useSelector((state) => state.townWeather.weatherForecast.list);
 
+  console.log('slider');
   return (
     <HourlyForecastList>
       <Splide
@@ -41,4 +42,4 @@ function ThreeHourlyForecastList() {
   );
 }
 
-export default ThreeHourlyForecastList;
+export default memo(ThreeHourlyForecastList);

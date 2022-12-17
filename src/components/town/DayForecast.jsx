@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import { DateTime } from "luxon";
 import styled from "styled-components";
 import {useSelector} from 'react-redux';
@@ -30,7 +30,7 @@ const DayWeather = styled.div`
     }
   `;
   
-function FiveDaysForecast({ day }) {
+function DayForecast({ day }) {
   const weekdays = {
     1: "Monday",
     2: "Tuesday",
@@ -61,4 +61,4 @@ function FiveDaysForecast({ day }) {
   );
 }
 
-export default FiveDaysForecast;
+export default memo(DayForecast);

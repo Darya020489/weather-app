@@ -1,16 +1,16 @@
-import React from "react";
+import React, {memo} from "react";
 import { useSelector } from "react-redux";
 import Flex from "../Flex";
-import FiveDaysForecast from "./FiveDaysForecast";
+import DayForecast from "./DayForecast";
 
-function FiveDaysForecastList() {
+function DaysForecastList() {
   const list = useSelector((store) => store.townWeather.weatherForecast.list.filter((day, index) => index % 8 === 0));
-
+console.log("weekdays");
   return (
     <Flex direction='column' align="start">
-      {list && list.map((day) => <FiveDaysForecast key={day.dt} day={day} />)}
+      {list && list.map((day) => <DayForecast key={day.dt} day={day} />)}
     </Flex>
   );
 }
 
-export default FiveDaysForecastList;
+export default memo(DaysForecastList);

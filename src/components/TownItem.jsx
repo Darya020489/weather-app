@@ -32,8 +32,8 @@ const CityItem = styled.div`
     display: inline-block;
 
     &_big {
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       animation: pulsate-bck 1s ease-in-out infinite both;
     }
   }
@@ -66,7 +66,6 @@ const CityItem = styled.div`
 `;
 
 function TownItem({ town, deleteTown, showComponents }) {
-  console.log(town);
   const measure = useSelector((state) => state.indicators.measure);
   const temperature = getTemperature(town.list[0].main.temp, measure);
   const feeelsLikeTemp = getTemperature(town.list[0].main.feels_like, measure);
@@ -79,6 +78,7 @@ function TownItem({ town, deleteTown, showComponents }) {
     city__img_big: showComponents === undefined,
   });
 
+  console.log('item');
   return (
     <CityItem className="city">
       {showComponents && (

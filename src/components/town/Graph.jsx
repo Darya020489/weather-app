@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo, memo} from "react";
 import { VictoryChart, VictoryLine, VictoryAxis } from "victory";
 import { useSelector } from "react-redux";
 import { getTemperature } from "../../functions/getTemperature";
@@ -12,7 +12,7 @@ function Graph() {
   const dataList = tempList.map((el, index) => {
     return { x: index, y: getTemperature(el.main.temp, "°C") };
   });
-  console.log(dataList);
+  console.log('graph');
 
   return (
     <>
@@ -41,4 +41,4 @@ function Graph() {
   );
 }
 
-export default Graph;
+export default memo(Graph);
