@@ -11,7 +11,6 @@ import {
 } from "../store/slices/townWeatherSlice";
 import weatherService from "../services/weatherService";
 import styled from "@emotion/styled";
-// import styled from "styled-components";
 import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
 import ShortInfo from "./town/ShortInfo";
@@ -21,21 +20,34 @@ import DayForecast from "./town/DaysForecastList";
 import ThreeHourlyForecastList from "./town/ThreeHourlyForecastList";
 import AdditionalInfo from "./town/AdditionalInfo";
 import Graph from "./town/Graph";
-
-// function Town(props) {
-//   return <TownContainer {...props}>{props.children}</TownContainer>;
-// }
+import PersonalInfo from "./town/PersonalInfo";
+// import Ocean from "../components/town/Ocean";
 
 function TownWeather() {
   const [townImage, setTownImage] = useState(
     localStorage.getItem("cityImage") ?? undefined
   );
 
-
-
   const Town = useMemo(() => {
     return styled.div`
+      position: relative;
+      padding: 20px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: start;
+
+      h2 {
+        margin-top: 20px;
+        padding-bottom: 15px;
+        font-size: 20px;
+        text-align: left;
+      }
+
       .town-weather__container {
+        padding: 20px;
         background: ${`linear-gradient(
         rgba(255, 255, 255, 0.7) 0%,
         rgba(255, 255, 255, 0.7) 100%
@@ -45,13 +57,40 @@ function TownWeather() {
         center/cover no-repeat`};
         border-radius: 10px;
       }
+
+      .town-weather__input {
+        margin-right: 20px;
+        padding: 3px;
+        outline: none;
+        border-radius: 5px;
+        border: 1px solid black;
+
+        &-error {
+          border-color: red;
+        }
+      }
+
+      button {
+        padding: 5px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        background-color: rgb(55, 130, 220);
+      }
     `;
   }, [townImage]);
 
   const ENTER_KEY_CODE = 13;
   const [coord, setCoord] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [showPersonalInfo, setShowPersonalInfo] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [temp, setTemp] = useState("");
+  const [visibility, setVisibility] = useState("");
+  const [main, setMain] = useState("");
+
+
+
 
   const dispatch = useDispatch();
 
@@ -61,12 +100,18 @@ function TownWeather() {
     (state) => state.townWeather.weatherForecast
   );
 
+
+      // const temp = useSelector(
+      //   (state) => state.townWeather.weatherForecast.list[0].main.temp - 273.15);
+      // const visibility = useSelector(
+      //   (state) => state.townWeather.weatherForecast.list[0].visibility);
+      // const main = useSelector(
+      //   (state) => state.townWeather.weatherForecast.list[0].weather[0].main);
   // const params = useParams();
   // console.log(params);
 
   useEffect(() => {
     const currentForecast = JSON.parse(localStorage.getItem("weatherForecast"));
-
     if (currentForecast) {
       dispatch(setWeatherForecast(currentForecast));
     } else {
@@ -85,14 +130,12 @@ function TownWeather() {
 
   useEffect(() => {
     async function getImage() {
-      // if(!weatherForecast) return;
       if (!townImage && weatherForecast) {
         try {
           const result = await weatherService.getImageByName(
             weatherForecast.city.name.toLowerCase()
           );
           setTownImage(result);
-
           localStorage.setItem("cityImage", result);
         } catch (err) {
           console.log(err);
@@ -113,9 +156,17 @@ function TownWeather() {
       setShowError(true);
     } else {
       dispatch(getWeatherByName(inputValue));
-      const newImage = await weatherService.getImageByName(inputValue.trimStart().trimEnd());
-      setTownImage(newImage);
-      localStorage.setItem("cityImage", newImage);
+      try {
+        const newImage = await weatherService.getImageByName(
+          inputValue.trimStart().trimEnd().toLowerCase()
+        );
+        setTownImage(newImage);
+        localStorage.setItem("cityImage", newImage);
+      } catch (err) {
+        console.log(err);
+        setTownImage(undefined);
+        localStorage.removeItem("cityImage");
+      }
       setShowError(false);
       setInputValue("");
     }
@@ -125,6 +176,23 @@ function TownWeather() {
     if (e.keyCode !== ENTER_KEY_CODE) return;
     changeCity();
   };
+
+  useEffect(() => {
+    if(weatherForecast){
+      setTemp(weatherForecast.list[0].main.temp - 273.15);
+      setVisibility(weatherForecast.list[0].visibility);
+      setMain(weatherForecast.list[0].weather[0].main);
+    }
+  },[weatherForecast]);
+
+  useEffect(() => {
+    if (temp && visibility && main) {
+      if ((temp > 14 && main === "Clear") || temp >= 30 || temp < -10 || visibility < 2000 || main === "Rain") {
+        setShowPersonalInfo(true);
+        console.log(temp);
+      }
+    }
+  }, [temp, visibility, main]);
 
   const inputClass = showError
     ? "town-weather__input town-weather__input-error"
@@ -151,24 +219,23 @@ function TownWeather() {
               <button onClick={changeCity}>Change city</button>
             </Flex>
             {showError && <InputError />}
-
-            <h2 className="town-weather__header">
-              {weatherForecast.city.name}, {weatherForecast.city.country}
-            </h2>
-            <Flex justify="space-between" align="start">
+            <Flex justify="space-around" align="start">
               <ShortInfo />
-              <Graph />
-              <DayForecast />
+              <Flex direction="column">
+                <DayForecast />
+                {showPersonalInfo && <PersonalInfo temp={temp} visibility={visibility} main={main}/>}
+              </Flex>
             </Flex>
           </div>
           <ThreeHourlyForecastList />
-          <Flex justify="space-between" align="start">
+          <Flex justify="space-around" align="start">
             <AdditionalInfo />
-
-            <Map />
+            <Graph />
           </Flex>
+          <Map />
         </>
       )}
+      {/* <Ocean /> */}
     </Town>
   );
 }

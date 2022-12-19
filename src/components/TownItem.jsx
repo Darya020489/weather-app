@@ -1,4 +1,4 @@
-import React, {useMemo, memo} from "react";
+import React, { useMemo, memo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { getTemperature } from "../functions/getTemperature";
@@ -19,10 +19,6 @@ const CityItem = styled.div`
     font-size: 18px;
     font-weight: 700;
     color: rgb(21, 21, 127);
-
-    &_big {
-      font-size: 26px;
-    }
   }
 
   .city__img {
@@ -30,16 +26,6 @@ const CityItem = styled.div`
     height: 40px;
     margin: 0;
     display: inline-block;
-
-    &_big {
-      width: 100px;
-      height: 100px;
-      animation: pulsate-bck 1s ease-in-out infinite both;
-    }
-  }
-
-  .city__desc {
-    color: rgba(86, 78, 78, 0.829);
   }
 
   .city__delete {
@@ -51,65 +37,32 @@ const CityItem = styled.div`
     border: 1px solid black;
     border-radius: 5px;
   }
-
-  @keyframes pulsate-bck {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(0.8);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
 `;
 
-function TownItem({ town, deleteTown, showComponents }) {
+function TownItem({ town, deleteTown }) {
   const measure = useSelector((state) => state.indicators.measure);
   const temperature = getTemperature(town.list[0].main.temp, measure);
-  const feeelsLikeTemp = getTemperature(town.list[0].main.feels_like, measure);
 
-  const classTempSize = classNames("city__temp", {
-    city__temp_big: showComponents === undefined,
-  });
-
-  const classImgSize = classNames("city__img", {
-    city__img_big: showComponents === undefined,
-  });
-
-  console.log('item');
+  console.log("item");
   return (
     <CityItem className="city">
-      {showComponents && (
-        <p className="city__title">
-          {town.city.name}, {town.city.country}
-        </p>
-      )}
-      <p className={classTempSize}>
+      <p className="city__title">
+        {town.city.name}, {town.city.country}
+      </p>
+      <p className="city__temp">
         {temperature}
         {measure}
       </p>
       <img
-        className={classImgSize}
+        className="city__img"
         src={`https://openweathermap.org/img/w/${town.list[0].weather[0].icon}.png`}
         alt=""
       />
       <p className="city__desc">{town.list[0].weather[0].description}</p>
-      {showComponents && (
-        <button
-          className="city__delete"
-          onClick={() => deleteTown(town.city.id)}
-        >
-          x
-        </button>
-      )}
-      {!showComponents && (
-        <p className="city__desc">
-          feels like {feeelsLikeTemp}
-          {measure}
-        </p>
-      )}
+
+      <button className="city__delete" onClick={() => deleteTown(town.city.id)}>
+        x
+      </button>
     </CityItem>
   );
 }

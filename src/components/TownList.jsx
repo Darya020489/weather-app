@@ -39,6 +39,9 @@ const CityList = styled.aside`
     border-radius: 5px;
     color: white;
     background-color: rgb(55, 131, 221);
+    /* @media(max-width: 768px){
+      background-color: red;
+          } */
   }
 
   .town-list__input {
@@ -213,7 +216,7 @@ function TownList() {
               key={town.city.id}
               town={town}
               deleteTown={deleteTown}
-              showComponents={true}
+              // showComponents={true}
             ></TownItem>
           ))
         ) : (

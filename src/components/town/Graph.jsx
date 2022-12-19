@@ -1,21 +1,28 @@
-import React, {useMemo, memo} from "react";
+import React, { useMemo, memo } from "react";
 import { VictoryChart, VictoryLine, VictoryAxis } from "victory";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { getTemperature } from "../../functions/getTemperature";
+
+const WeatherChart = styled.div`
+  width: 50%;
+  height: 230px;
+`;
 
 function Graph() {
   const tempList = useSelector((state) =>
-  state.townWeather.weatherForecast.list.filter((el, index) => index % 8 === 0
-  )
-);
+    state.townWeather.weatherForecast.list.filter(
+      (el, index) => index % 8 === 0
+    )
+  );
 
   const dataList = tempList.map((el, index) => {
     return { x: index, y: getTemperature(el.main.temp, "°C") };
   });
-  console.log('graph');
+  console.log("graph");
 
   return (
-    <>
+    <WeatherChart>
       <VictoryChart height={250}>
         {/* <VictoryLabel text="Temperature" x={50} y={210} textAnchor="middle"/>
       <VictoryLabel text="Days" x={420} y={50} textAnchor="middle"/> */}
@@ -27,9 +34,7 @@ function Graph() {
           style={{
             data: { stroke: "rgb(55, 131, 221)", strokeWidth: 5 },
             parent: { border: "1px solid #ccc" },
-           
           }}
-          
           animate={{
             duration: 2000,
             onLoad: { duration: 1500 },
@@ -37,7 +42,7 @@ function Graph() {
           data={dataList}
         />
       </VictoryChart>
-    </>
+    </WeatherChart>
   );
 }
 

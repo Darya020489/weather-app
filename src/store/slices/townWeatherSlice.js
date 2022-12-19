@@ -42,7 +42,7 @@ export const getWeatherByName = createAsyncThunk(
 //   "townWeather/getTownImage",
 //   async (name, { rejectWithValue }) => {
 //     try {
-//       const result = await weatherService.getByName(name);
+//       const result = await weatherService.getImageByName(name);
 //       console.log(result);
 //       return result;
 //     } catch (err) {

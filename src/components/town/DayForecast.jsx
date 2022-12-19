@@ -7,15 +7,16 @@ import { getTemperature } from "../../functions/getTemperature";
 const DayWeather = styled.div`
     font-weight: 600;
     display: flex;
+    align-items: center;
 
     .weekday {
       width: 100px;
       text-align: left;
-      color: grey;
+      /* color: grey; */
     }
 
     img {
-      width: 35px;
+      width: 50px;
       margin-right: 20px;
     }
 

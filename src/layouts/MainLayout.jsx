@@ -8,9 +8,11 @@ import { useDispatch} from "react-redux";
 import DateContainer from "../components/DateContainer";
 import logo from "../assets/images/logo.png";
 import styled from "styled-components";
+// import Ocean from "../components/town/Ocean";
 
 const MainContainer = styled.section`
 .main__header {
+  /* position: relative; */
   padding: 10px;
   font-size: 24px;
   text-shadow: 1px 1px 2px grey;
@@ -49,6 +51,7 @@ function MainLayout() {
         <TownList></TownList>
         <TownWeather></TownWeather>
       </Flex>
+      {/* <Ocean /> */}
     </MainContainer>
   );
 }
