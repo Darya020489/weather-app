@@ -9,7 +9,7 @@ import umbrella from "../../assets/images/personalInfo/umbrella.svg";
 import Flex from "../Flex";
 
 const PersonalInfoContainer = styled.div`
-padding: 10px;
+  padding: 10px;
   border-radius: 10px;
   background-color: #b2afaf;
 
@@ -33,10 +33,8 @@ function PersonalInfo({ temp, visibility, main }) {
   );
 
   useEffect(() => {
-    if (temp >= 30) {
-      setText(
-        `A red danger level was declared in ${name}. Stay in the shadows.`
-      );
+    if (temp >= 24) {
+      setText(`A red danger level was declared in ${name}. Drink more water.`);
       setImage(hot);
     } else if (temp > 14 && main === "Clear") {
       setText(
@@ -52,14 +50,14 @@ function PersonalInfo({ temp, visibility, main }) {
     } else if (main === "Rain") {
       setText(`It's raining in ${name}. Don't forget to bring an umbrella.`);
       setImage(umbrella);
-    }
+    }console.log(temp, visibility, main);
   }, [temp, visibility, main]);
 
   return (
     <PersonalInfoContainer>
       <Flex>
-      <img className="personal-info__img" src={image} alt="" />
-      <p className="personal-info__text">{text}</p>
+        <img className="personal-info__img" src={image} alt="" />
+        <p className="personal-info__text">{text}</p>
       </Flex>
     </PersonalInfoContainer>
   );

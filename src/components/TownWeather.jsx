@@ -9,6 +9,7 @@ import {
   getWeatherByCoord,
   getWeatherByName,
 } from "../store/slices/townWeatherSlice";
+import { setMapLatLng } from "../store/slices/positionSlice";
 import weatherService from "../services/weatherService";
 import styled from "@emotion/styled";
 import MainLoader from "./loaders/MainLoader";
@@ -25,7 +26,7 @@ import PersonalInfo from "./town/PersonalInfo";
 
 function TownWeather() {
   const [townImage, setTownImage] = useState(
-    localStorage.getItem("cityImage") ?? undefined
+    localStorage.getItem("cityImage") ?? null
   );
 
   const Town = useMemo(() => {
@@ -100,6 +101,10 @@ function TownWeather() {
     (state) => state.townWeather.weatherForecast
   );
 
+  // const coordinates = useSelector(
+  //   (state) => state.position.coordinates
+  // );
+
 
       // const temp = useSelector(
       //   (state) => state.townWeather.weatherForecast.list[0].main.temp - 273.15);
@@ -118,6 +123,8 @@ function TownWeather() {
       const pos = navigator.geolocation;
       pos.getCurrentPosition((loc) => {
         setCoord({ lat: loc.coords.latitude, lon: loc.coords.longitude });
+        // console.log(loc.coords.latitude);
+   
       });
     }
   }, []);
@@ -145,6 +152,18 @@ function TownWeather() {
     getImage();
   }, [weatherForecast]);
 
+  // useEffect(() => {
+  //   const townCoord = weatherForecast.coordinates;
+  //     if (Math.round(coordinates.lat) !== Math.round(townCoord.lat) || Math.round(coordinates.lon) !== Math.round(townCoord.lon)) {
+  //       dispatch(
+  //         setMapLatLng({
+  //           lat: townCoord.lat,
+  //           lon: townCoord.lon,
+  //         })
+  //       );
+  //     }
+  // }, [weatherForecast]);
+
   const changeCity = async () => {
     if (inputValue === "") {
       dispatch(changeError("emptyEnter"));
@@ -162,9 +181,10 @@ function TownWeather() {
         );
         setTownImage(newImage);
         localStorage.setItem("cityImage", newImage);
+        
       } catch (err) {
         console.log(err);
-        setTownImage(undefined);
+        setTownImage(null);
         localStorage.removeItem("cityImage");
       }
       setShowError(false);
@@ -190,7 +210,7 @@ function TownWeather() {
       if ((temp > 14 && main === "Clear") || temp >= 30 || temp < -10 || visibility < 2000 || main === "Rain") {
         setShowPersonalInfo(true);
         console.log(temp);
-      }
+      }else{setShowPersonalInfo(false)}
     }
   }, [temp, visibility, main]);
 

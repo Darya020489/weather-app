@@ -4,7 +4,7 @@ import weatherService from "../../services/weatherService";
 const initialState = {
   weatherForecast: null,
   isLoading: true,
-  // townImage: "",
+  coordinates : null,
   error: "",
 };
 
@@ -61,8 +61,8 @@ const townWeatherSlice = createSlice({
       state.weatherForecast = payload;
       state.isLoading = false;
     },
-    setTownImage(state, { payload }) {
-      state.townImage = payload;
+    setCoordinates(state, { payload }) {
+      state.coordinates = payload;
     },
   },
   extraReducers: {
@@ -71,6 +71,7 @@ const townWeatherSlice = createSlice({
     },
     [getWeatherByCoord.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
+      state.coordinates = {lat: payload.city.coord.lat, lon: payload.city.coord.lon};
       console.log(payload);
       state.isLoading = false;
       localStorage.setItem("weatherForecast", JSON.stringify(payload));
@@ -84,6 +85,7 @@ const townWeatherSlice = createSlice({
     },
     [getWeatherByName.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
+      state.coordinates = {lat: payload.city.coord.lat, lon: payload.city.coord.lon};
       state.isLoading = false;
       localStorage.setItem("weatherForecast", JSON.stringify(payload));
     },
@@ -94,4 +96,4 @@ const townWeatherSlice = createSlice({
 });
 
 export default townWeatherSlice.reducer;
-export const { setWeatherForecast } = townWeatherSlice.actions;
+export const { setWeatherForecast, setCoordinates } = townWeatherSlice.actions;
