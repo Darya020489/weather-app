@@ -4,7 +4,8 @@ import weatherService from "../../services/weatherService";
 const initialState = {
   weatherForecast: null,
   isLoading: true,
-  coordinates : null,
+  coordinates: null,
+  townImage: null,
   error: "",
 };
 
@@ -38,20 +39,20 @@ export const getWeatherByName = createAsyncThunk(
   }
 );
 
-// export const getTownImage = createAsyncThunk(
-//   "townWeather/getTownImage",
-//   async (name, { rejectWithValue }) => {
-//     try {
-//       const result = await weatherService.getImageByName(name);
-//       console.log(result);
-//       return result;
-//     } catch (err) {
-//       console.log(err);
-//       console.log(rejectWithValue(err));
-//       return rejectWithValue(err);
-//     }
-//   }
-// );
+export const getTownImage = createAsyncThunk(
+  "townWeather/getTownImage",
+  async (name, { rejectWithValue }) => {
+    try {
+      const result = await weatherService.getImageByName(name);
+      console.log(result);
+      return result;
+    } catch (err) {
+      console.log(err);
+      console.log(rejectWithValue(err));
+      return rejectWithValue(err);
+    }
+  }
+);
 
 const townWeatherSlice = createSlice({
   name: "townWeather",
@@ -59,6 +60,10 @@ const townWeatherSlice = createSlice({
   reducers: {
     setWeatherForecast(state, { payload }) {
       state.weatherForecast = payload;
+      state.coordinates = {
+        lat: payload.city.coord.lat,
+        lon: payload.city.coord.lon,
+      };
       state.isLoading = false;
     },
     setCoordinates(state, { payload }) {
@@ -71,8 +76,10 @@ const townWeatherSlice = createSlice({
     },
     [getWeatherByCoord.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
-      state.coordinates = {lat: payload.city.coord.lat, lon: payload.city.coord.lon};
-      console.log(payload);
+      state.coordinates = {
+        lat: payload.city.coord.lat,
+        lon: payload.city.coord.lon,
+      };
       state.isLoading = false;
       localStorage.setItem("weatherForecast", JSON.stringify(payload));
     },
@@ -85,12 +92,23 @@ const townWeatherSlice = createSlice({
     },
     [getWeatherByName.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
-      state.coordinates = {lat: payload.city.coord.lat, lon: payload.city.coord.lon};
+      state.coordinates = {
+        lat: payload.city.coord.lat,
+        lon: payload.city.coord.lon,
+      };
       state.isLoading = false;
       localStorage.setItem("weatherForecast", JSON.stringify(payload));
     },
     [getWeatherByName.rejected]: (state, { payload }) => {
       state.error = payload.message;
+    },
+    [getTownImage.fulfilled]: (state, { payload }) => {
+      state.townImage = payload;
+      localStorage.setItem("cityImage", payload);
+    },
+    [getTownImage.rejected]: (state, { payload }) => {
+      state.townImage = null;
+      localStorage.removeItem("cityImage");
     },
   },
 });

@@ -4,10 +4,11 @@ import Flex from "../Flex";
 
 const Spinner = styled.div`
   position: absolute;
-  top: 250px;
-  right: 50%;
+  top: 50px; 
+  /* right: 50%; */ 
   width: 15.7px;
   height: 15.7px;
+ 
   div {
     width: 100%;
     height: 100%;

@@ -1,44 +1,45 @@
 import React, { useMemo, memo } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams, Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setWeatherForecast } from "../store/slices/townWeatherSlice";
 import { changeError } from "../store/slices/errorsSlice";
 import {
   getWeatherByCoord,
   getWeatherByName,
+  getTownImage,
 } from "../store/slices/townWeatherSlice";
-import { setMapLatLng } from "../store/slices/positionSlice";
-import weatherService from "../services/weatherService";
 import styled from "@emotion/styled";
 import MainLoader from "./loaders/MainLoader";
 import Flex from "./Flex";
 import ShortInfo from "./town/ShortInfo";
 import InputError from "./errors/InputError";
-import Map from "./town/Map";
 import DayForecast from "./town/DaysForecastList";
 import ThreeHourlyForecastList from "./town/ThreeHourlyForecastList";
 import AdditionalInfo from "./town/AdditionalInfo";
 import Graph from "./town/Graph";
 import PersonalInfo from "./town/PersonalInfo";
-// import Ocean from "../components/town/Ocean";
 
 function TownWeather() {
-  const [townImage, setTownImage] = useState(
-    localStorage.getItem("cityImage") ?? null
+  const townImage = useSelector(
+    (state) => localStorage.getItem("cityImage") ?? state.townWeather.townImage
   );
 
   const Town = useMemo(() => {
     return styled.div`
       position: relative;
-      padding: 20px;
       width: 100%;
       height: 100%;
       display: flex;
       flex: 1;
       flex-direction: column;
       justify-content: start;
+
+      .loader-container {
+        position: relative;
+        width: 100%;
+        height: 190px;
+      }
 
       h2 {
         margin-top: 20px;
@@ -77,6 +78,14 @@ function TownWeather() {
         border-radius: 5px;
         color: white;
         background-color: rgb(55, 130, 220);
+
+        &:hover {
+          background-color: rgb(91, 148, 217);
+        }
+
+        &:active {
+          background-color: rgb(26, 112, 217);
+        }
       }
     `;
   }, [townImage]);
@@ -90,9 +99,6 @@ function TownWeather() {
   const [visibility, setVisibility] = useState("");
   const [main, setMain] = useState("");
 
-
-
-
   const dispatch = useDispatch();
 
   const isLoading = useSelector((state) => state.townWeather.isLoading);
@@ -100,20 +106,6 @@ function TownWeather() {
   const weatherForecast = useSelector(
     (state) => state.townWeather.weatherForecast
   );
-
-  // const coordinates = useSelector(
-  //   (state) => state.position.coordinates
-  // );
-
-
-      // const temp = useSelector(
-      //   (state) => state.townWeather.weatherForecast.list[0].main.temp - 273.15);
-      // const visibility = useSelector(
-      //   (state) => state.townWeather.weatherForecast.list[0].visibility);
-      // const main = useSelector(
-      //   (state) => state.townWeather.weatherForecast.list[0].weather[0].main);
-  // const params = useParams();
-  // console.log(params);
 
   useEffect(() => {
     const currentForecast = JSON.parse(localStorage.getItem("weatherForecast"));
@@ -123,8 +115,6 @@ function TownWeather() {
       const pos = navigator.geolocation;
       pos.getCurrentPosition((loc) => {
         setCoord({ lat: loc.coords.latitude, lon: loc.coords.longitude });
-        // console.log(loc.coords.latitude);
-   
       });
     }
   }, []);
@@ -136,33 +126,8 @@ function TownWeather() {
   }, [coord, dispatch]);
 
   useEffect(() => {
-    async function getImage() {
-      if (!townImage && weatherForecast) {
-        try {
-          const result = await weatherService.getImageByName(
-            weatherForecast.city.name.toLowerCase()
-          );
-          setTownImage(result);
-          localStorage.setItem("cityImage", result);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    }
-    getImage();
-  }, [weatherForecast]);
-
-  // useEffect(() => {
-  //   const townCoord = weatherForecast.coordinates;
-  //     if (Math.round(coordinates.lat) !== Math.round(townCoord.lat) || Math.round(coordinates.lon) !== Math.round(townCoord.lon)) {
-  //       dispatch(
-  //         setMapLatLng({
-  //           lat: townCoord.lat,
-  //           lon: townCoord.lon,
-  //         })
-  //       );
-  //     }
-  // }, [weatherForecast]);
+    console.log(townImage);
+  }, [townImage]);
 
   const changeCity = async () => {
     if (inputValue === "") {
@@ -175,18 +140,8 @@ function TownWeather() {
       setShowError(true);
     } else {
       dispatch(getWeatherByName(inputValue));
-      try {
-        const newImage = await weatherService.getImageByName(
-          inputValue.trimStart().trimEnd().toLowerCase()
-        );
-        setTownImage(newImage);
-        localStorage.setItem("cityImage", newImage);
-        
-      } catch (err) {
-        console.log(err);
-        setTownImage(null);
-        localStorage.removeItem("cityImage");
-      }
+      dispatch(getTownImage(inputValue.trimStart().trimEnd().toLowerCase()));
+
       setShowError(false);
       setInputValue("");
     }
@@ -198,19 +153,26 @@ function TownWeather() {
   };
 
   useEffect(() => {
-    if(weatherForecast){
+    if (weatherForecast) {
       setTemp(weatherForecast.list[0].main.temp - 273.15);
       setVisibility(weatherForecast.list[0].visibility);
       setMain(weatherForecast.list[0].weather[0].main);
     }
-  },[weatherForecast]);
+  }, [weatherForecast]);
 
   useEffect(() => {
     if (temp && visibility && main) {
-      if ((temp > 14 && main === "Clear") || temp >= 30 || temp < -10 || visibility < 2000 || main === "Rain") {
+      if (
+        (temp > 14 && main === "Clear") ||
+        temp >= 30 ||
+        temp < -10 ||
+        visibility < 2000 ||
+        main === "Rain"
+      ) {
         setShowPersonalInfo(true);
-        console.log(temp);
-      }else{setShowPersonalInfo(false)}
+      } else {
+        setShowPersonalInfo(false);
+      }
     }
   }, [temp, visibility, main]);
 
@@ -220,9 +182,10 @@ function TownWeather() {
 
   return (
     <Town>
-      {/* <Outlet /> */}
       {isLoading ? (
-        <MainLoader />
+        <div className="loader-container">
+          <MainLoader />
+        </div>
       ) : (
         <>
           <div className="town-weather__container">
@@ -243,7 +206,13 @@ function TownWeather() {
               <ShortInfo />
               <Flex direction="column">
                 <DayForecast />
-                {showPersonalInfo && <PersonalInfo temp={temp} visibility={visibility} main={main}/>}
+                {showPersonalInfo && (
+                  <PersonalInfo
+                    temp={temp}
+                    visibility={visibility}
+                    main={main}
+                  />
+                )}
               </Flex>
             </Flex>
           </div>
@@ -252,10 +221,8 @@ function TownWeather() {
             <AdditionalInfo />
             <Graph />
           </Flex>
-          <Map />
         </>
       )}
-      {/* <Ocean /> */}
     </Town>
   );
 }

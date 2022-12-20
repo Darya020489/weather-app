@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 // import styled from 'styled-components';
 import styled from "@emotion/styled";
@@ -18,9 +18,8 @@ function AdditionalInfo() {
     theme === "dark" ? themeStyles.darkStyles : themeStyles.lightStyles;
 
   const MoreInfo = styled.div`
-  background: ${styles.background};
+    background: ${styles.background};
     h4 {
-      /* margin-top: 10px; */
       text-align: left;
     }
     img {
@@ -36,9 +35,7 @@ function AdditionalInfo() {
       color: rgb(55, 130, 220);
     }
   `;
-console.log('info');
-
-
+  console.log("info");
 
   const info = useSelector(
     (state) => state.townWeather.weatherForecast.list[0]

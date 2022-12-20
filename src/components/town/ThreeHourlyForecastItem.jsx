@@ -4,24 +4,26 @@ import { useSelector } from "react-redux";
 import { getTemperature } from "../../functions/getTemperature";
 
 const ThreeHourlyItem = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-padding: 15px 0px;
-font-size: 12px;
-font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px 0px;
+  font-size: 12px;
+  font-weight: 700;
 
-img {
-  width: 30px;
-}
-.threeHourlyItem__time {
-  color: grey;
-}
+  img {
+    width: 30px;
+  }
+  .threeHourlyItem__time {
+    color: grey;
+  }
 `;
 
 function ThreeHourlyForecastItem({ weather }) {
   const measure = useSelector((state) => state.indicators.measure);
   const temperature = getTemperature(weather.main.temp, measure);
+
+  console.log("3hourly");
 
   const date = weather.dt_txt;
   const dateNow = useSelector(

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState, memo } from "react";
-// import "../assets/styles/townList.css";
 import styled from "styled-components";
 import Flex from "./Flex";
 import TownItem from "./TownItem";
@@ -42,6 +41,12 @@ const CityList = styled.aside`
     /* @media(max-width: 768px){
       background-color: red;
           } */
+    &:hover {
+      background-color: rgb(91, 148, 217);
+    }
+    &:active {
+      background-color: rgb(26, 112, 217);
+    }
   }
 
   .town-list__input {
@@ -62,6 +67,12 @@ const CityList = styled.aside`
     border: none;
     border-radius: 5px;
     background-color: rgb(55, 130, 220);
+    &:hover {
+      background-color: rgb(91, 148, 217);
+    }
+    &:active {
+      background-color: rgb(26, 112, 217);
+    }
   }
 
   .checkbox {
@@ -75,7 +86,6 @@ const CityList = styled.aside`
   .checkbox__element {
     margin-right: 10px;
     margin-left: 5px;
-    /* margin-bottom: 80px; */
     width: 0;
     height: 0;
     visibility: hidden;
@@ -216,7 +226,6 @@ function TownList() {
               key={town.city.id}
               town={town}
               deleteTown={deleteTown}
-              // showComponents={true}
             ></TownItem>
           ))
         ) : (

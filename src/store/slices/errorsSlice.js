@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   inputError: "",
   text: {
-    emptyEnter: 'Enter the name of the city',
-    alreadyExists: 'Such a city already exists',
+    emptyEnter: "Enter the name of the city",
+    alreadyExists: "Such a city already exists",
   },
 };
 

@@ -1,13 +1,11 @@
-import React, { useMemo, memo } from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { getTemperature } from "../functions/getTemperature";
-import classNames from "classnames";
 
 const CityItem = styled.div`
   position: relative;
   padding: 15px;
-  /* width: 90%; */
   min-width: 150px;
   max-width: 200px;
   margin-bottom: 15px;

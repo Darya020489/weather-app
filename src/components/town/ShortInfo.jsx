@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-// import TownItem from "../TownItem";
 import { getTemperature } from "../../functions/getTemperature";
 
 const Info = styled.div`
-.info__title{
-  font-size: 22px;
-}
+  .info__title {
+    font-size: 22px;
+  }
   .info__temp {
     font-size: 26px;
     font-weight: 700;
@@ -21,20 +21,26 @@ const Info = styled.div`
     animation: pulsate-bck 1s ease-in-out infinite both;
   }
 
+  .info__container {
+    margin-bottom: 10px;
+    font-size: 18px;
+    /* line-height: 1.4; */
+    color: #454444;
+  }
+
   .info__desc {
-    margin-bottom: 10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(21, 21, 127);
   }
 
-  .info__temp-max {
-    margin-bottom: 10px;
+  .info__tomorrow {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgb(21, 21, 127);
   }
-  .info__temp-min {
-    margin-bottom: 10px;
-  }
-
-  /* .info__desc {
-      color: rgba(86, 78, 78, 0.829);
-    } */
 
   @keyframes pulsate-bck {
     0% {
@@ -50,12 +56,27 @@ const Info = styled.div`
 `;
 
 function ShortInfo() {
+  const [showDiff, setShowDiff] = useState(false);
+
   const town = useSelector((state) => state.townWeather.weatherForecast);
   const measure = useSelector((state) => state.indicators.measure);
   const temperature = getTemperature(town.list[0].main.temp, measure);
+  const description = town.list[0].weather[0].description;
+  const feeelsLikeTemp = getTemperature(town.list[0].main.feels_like, measure);
   const maxTemp = getTemperature(town.list[0].main.temp_max, measure);
   const minTemp = getTemperature(town.list[0].main.temp_min, measure);
-  const feeelsLikeTemp = getTemperature(town.list[0].main.feels_like, measure);
+  const tempTomorrow = getTemperature(town.list[8].main.temp, measure);
+  const tempDiff = tempTomorrow - temperature;
+  const textDiff = tempDiff < 0 ? "less" : "more";
+
+  console.log("short");
+
+  useEffect(() => {
+    if (tempDiff !== 0) {
+      setShowDiff(true);
+    }
+  }, [town]);
+
   return (
     <Info town={town}>
       <h2 className="info__title">
@@ -70,18 +91,28 @@ function ShortInfo() {
         src={`https://openweathermap.org/img/w/${town.list[0].weather[0].icon}.png`}
         alt=""
       />
-      <p className="info__desc">
-        feels like {feeelsLikeTemp}
-        {measure}
-      </p>
-      <p className="info__temp-max">
-        night temperature {minTemp}
-        {measure}
-      </p>
-      <p className="info__temp-min">
-        day temperature {maxTemp}
-        {measure}
-      </p>
+      <div className="info__container">
+        <p className="info__desc">{description}</p>
+        <p className="info__feels">
+          feels like {feeelsLikeTemp}
+          {measure}
+        </p>
+        <p className="info__temp-max">
+          night temperature {minTemp}
+          {measure}
+        </p>
+        <p className="info__temp-min">
+          day temperature {maxTemp}
+          {measure}
+        </p>
+        {showDiff && (
+          <p className="info__tomorrow">
+            It's {tempTomorrow} {measure} tomorrow.{" "}
+            {tempDiff < 0 ? -tempDiff : tempDiff} {measure} {textDiff} than
+            today.
+          </p>
+        )}
+      </div>
     </Info>
   );
 }

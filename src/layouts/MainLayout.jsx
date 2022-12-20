@@ -3,24 +3,22 @@ import TownList from "../components/TownList";
 import Flex from "../components/Flex";
 import CustomizedSwitches from "../components/SwitcherTheme";
 import { changeTheme } from "../store/slices/themeSlice";
-import TownWeather from "../components/TownWeather";
-import { useDispatch} from "react-redux";
+import TownWeatherWrap from "../components/TownWeatherWrap";
+import { useDispatch } from "react-redux";
 import DateContainer from "../components/DateContainer";
 import logo from "../assets/images/logo.png";
 import styled from "styled-components";
-// import Ocean from "../components/town/Ocean";
 
 const MainContainer = styled.section`
-.main__header {
-  /* position: relative; */
-  padding: 10px;
-  font-size: 24px;
-  text-shadow: 1px 1px 2px grey;
-}
+  .main__header {
+    padding: 10px;
+    font-size: 24px;
+    text-shadow: 1px 1px 2px grey;
+  }
 
-.main__img {
-  width: 45px;
-}
+  .main__img {
+    width: 45px;
+  }
 `;
 
 function MainLayout() {
@@ -48,10 +46,9 @@ function MainLayout() {
         <DateContainer />
       </Flex>
       <Flex justify="space-between" align="start">
-        <TownList></TownList>
-        <TownWeather></TownWeather>
+        <TownList />
+        <TownWeatherWrap />
       </Flex>
-      {/* <Ocean /> */}
     </MainContainer>
   );
 }

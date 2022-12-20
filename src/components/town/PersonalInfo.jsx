@@ -28,6 +28,8 @@ function PersonalInfo({ temp, visibility, main }) {
   const [text, setText] = useState("");
   const [image, setImage] = useState("");
 
+  console.log("personal");
+
   const name = useSelector(
     (state) => state.townWeather.weatherForecast.city.name
   );
@@ -50,7 +52,7 @@ function PersonalInfo({ temp, visibility, main }) {
     } else if (main === "Rain") {
       setText(`It's raining in ${name}. Don't forget to bring an umbrella.`);
       setImage(umbrella);
-    }console.log(temp, visibility, main);
+    }
   }, [temp, visibility, main]);
 
   return (

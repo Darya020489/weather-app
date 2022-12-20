@@ -7,7 +7,7 @@ const FlexContainer = styled.div`
   align-items: ${({ align }) => align || "center"};
   justify-content: ${({ justify }) => justify || "center"};
   margin: ${({ margin }) => margin || ""};
-  padding: ${({padding}) => padding || ''};
+  padding: ${({ padding }) => padding || ""};
   background-color: ${({ background }) => background || ""};
   border: ${({ border }) => border || ""};
 `;
