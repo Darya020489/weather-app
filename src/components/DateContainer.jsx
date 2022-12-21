@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { useState } from "react";
 import { DateTime } from "luxon";
 import moment from "moment";
@@ -49,4 +49,4 @@ function DateContainer() {
   );
 }
 
-export default DateContainer;
+export default memo(DateContainer);

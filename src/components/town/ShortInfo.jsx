@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -75,7 +75,7 @@ function ShortInfo() {
     if (tempDiff !== 0) {
       setShowDiff(true);
     }
-  }, [town]);
+  }, [tempDiff]);
 
   return (
     <Info town={town}>
@@ -117,4 +117,4 @@ function ShortInfo() {
   );
 }
 
-export default ShortInfo;
+export default memo(ShortInfo);

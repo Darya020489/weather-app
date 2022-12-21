@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TownList from "../components/TownList";
 import Flex from "../components/Flex";
 import CustomizedSwitches from "../components/SwitcherTheme";
 import { changeTheme } from "../store/slices/themeSlice";
 import TownWeatherWrap from "../components/TownWeatherWrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DateContainer from "../components/DateContainer";
 import logo from "../assets/images/logo.png";
 import styled from "styled-components";
+import Map from "../components/town/Map";
+import { setSize } from "../store/slices/mapSlice";
 
 const MainContainer = styled.section`
   .main__header {
@@ -23,6 +25,21 @@ const MainContainer = styled.section`
 
 function MainLayout() {
   const dispatch = useDispatch();
+  const mapIsSmall = useSelector((store) => store.map.isSmall);
+  const [actualSize, setActualSize] = useState(true);
+
+  useEffect(() => {
+    const size = JSON.parse(localStorage.getItem("mapSize"));
+    if (typeof size === "boolean") {
+      dispatch(setSize(size));
+      setActualSize(size);
+    }
+  }, []);
+
+  useEffect(() => {
+    setActualSize(mapIsSmall);
+  }, [mapIsSmall]);
+
   const switchTheme = () => {
     dispatch(changeTheme());
   };
@@ -45,8 +62,16 @@ function MainLayout() {
         <CustomizedSwitches switchTheme={switchTheme} />
         <DateContainer />
       </Flex>
-      <Flex justify="space-between" align="start">
-        <TownList />
+      <Flex align="start">
+        <Flex
+          direction="column"
+          width="20%"
+          height="100%"
+          border="1px solid rgba(144, 141, 141, 0.829)"
+        >
+          {actualSize && <Map />}
+          <TownList />
+        </Flex>
         <TownWeatherWrap />
       </Flex>
     </MainContainer>

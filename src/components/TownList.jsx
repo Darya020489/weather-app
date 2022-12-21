@@ -11,17 +11,9 @@ import classNames from "classnames";
 import AsideLoader from "./loaders/AsideLoader";
 import checkMarkIcon from "../assets/images/check-mark-icon.svg";
 
-const CityList = styled.aside`
-  width: 20%;
-  /* max-width: 200px; */
-  height: 100%;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid rgba(144, 141, 141, 0.829);
-
+const CityList = styled.div`
   .town-list__header {
-    margin-bottom: 15px;
+    margin: 10px 0;
     font-size: 16px;
   }
 
@@ -220,7 +212,7 @@ function TownList() {
     <CityList className="town-list">
       <h2 className={classTownListHeader}>Today</h2>
       <Flex direction="column" className="town-list__body">
-        {townsWeather.length ? (
+        {!!townsWeather.length ? (
           townsWeather.map((town) => (
             <TownItem
               key={town.city.id}
@@ -232,7 +224,7 @@ function TownList() {
           <AsideLoader />
         )}
       </Flex>
-      <Flex>
+      <Flex margin="0 0 10px 0">
         {!addingCity && (
           <button className="town-list__adding-btn" onClick={showAddingInput}>
             + Add city
@@ -267,7 +259,7 @@ function TownList() {
         </label>
       </Flex>
       {addingCity && (
-        <Flex margin="20px 0 0">
+        <Flex margin="0 0 10px 0">
           <input
             type="text"
             placeholder="Enter the city"

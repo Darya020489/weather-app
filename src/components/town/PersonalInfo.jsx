@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import hot from "../../assets/images/personalInfo/hot.svg";
@@ -53,7 +53,7 @@ function PersonalInfo({ temp, visibility, main }) {
       setText(`It's raining in ${name}. Don't forget to bring an umbrella.`);
       setImage(umbrella);
     }
-  }, [temp, visibility, main]);
+  }, [temp, visibility, main, name]);
 
   return (
     <PersonalInfoContainer>
@@ -65,4 +65,4 @@ function PersonalInfo({ temp, visibility, main }) {
   );
 }
 
-export default PersonalInfo;
+export default memo(PersonalInfo);

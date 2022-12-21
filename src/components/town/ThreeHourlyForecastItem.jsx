@@ -1,5 +1,5 @@
+import React, {memo} from "react";
 import styled from "styled-components";
-import React from "react";
 import { useSelector } from "react-redux";
 import { getTemperature } from "../../functions/getTemperature";
 
@@ -52,4 +52,4 @@ function ThreeHourlyForecastItem({ weather }) {
   );
 }
 
-export default ThreeHourlyForecastItem;
+export default memo(ThreeHourlyForecastItem);

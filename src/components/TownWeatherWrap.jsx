@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useSelector } from "react-redux";
 import TownWeather from "./TownWeather";
 import styled from "styled-components";
@@ -12,16 +12,20 @@ const TownWeatherWrapper = styled.div`
 `;
 
 function TownWeatherWrap() {
-  const isLoading = useSelector((state) => state.townWeather.isLoading);
-
+  const mapIsSmall = useSelector((store) => store.map.isSmall);
+  const [actualSize, setActualSize] = useState(true);
   console.log("wrap");
+
+  useEffect(() => {
+    setActualSize(mapIsSmall);
+  }, [mapIsSmall]);
 
   return (
     <TownWeatherWrapper>
       <TownWeather />
-      <Map />
+      {!actualSize && <Map />}
     </TownWeatherWrapper>
   );
 }
 
-export default TownWeatherWrap;
+export default memo(TownWeatherWrap);

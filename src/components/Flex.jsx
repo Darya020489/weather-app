@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React from "react";
 
 const FlexContainer = styled.div`
+  width: ${({ width }) => width || ""};
+  height: ${({ height }) => height || ""};
   display: flex;
   flex-direction: ${({ direction }) => direction || "row"};
   align-items: ${({ align }) => align || "center"};
