@@ -6,6 +6,7 @@ const initialState = {
   isLoading: true,
   coordinates: null,
   townImage: null,
+  isError: false,
   error: "",
 };
 
@@ -69,6 +70,9 @@ const townWeatherSlice = createSlice({
     setCoordinates(state, { payload }) {
       state.coordinates = payload;
     },
+    setIsError(state, { payload }) {
+      state.isError = payload;
+    },
   },
   extraReducers: {
     [getWeatherByCoord.pending]: (state) => {
@@ -89,6 +93,7 @@ const townWeatherSlice = createSlice({
 
     [getWeatherByName.pending]: (state) => {
       state.isLoading = true;
+      state.isError = false;
     },
     [getWeatherByName.fulfilled]: (state, { payload }) => {
       state.weatherForecast = payload;
@@ -97,10 +102,13 @@ const townWeatherSlice = createSlice({
         lon: payload.city.coord.lon,
       };
       state.isLoading = false;
+      state.isError = false;
       localStorage.setItem("weatherForecast", JSON.stringify(payload));
     },
     [getWeatherByName.rejected]: (state, { payload }) => {
       state.error = payload.message;
+      state.isError = true;
+      state.isLoading = false;
     },
     [getTownImage.fulfilled]: (state, { payload }) => {
       state.townImage = payload;
@@ -114,4 +122,5 @@ const townWeatherSlice = createSlice({
 });
 
 export default townWeatherSlice.reducer;
-export const { setWeatherForecast, setCoordinates } = townWeatherSlice.actions;
+export const { setWeatherForecast, setCoordinates, setIsError } =
+  townWeatherSlice.actions;

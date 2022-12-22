@@ -4,7 +4,6 @@ import classNames from "classnames";
 import {
   MapContainer,
   TileLayer,
-  SVGOverlay,
   Marker,
   ImageOverlay,
   useMap,
@@ -17,7 +16,6 @@ import { setCoordinates } from "../../store/slices/townWeatherSlice";
 import { getWeatherByCoord } from "../../store/slices/townWeatherSlice";
 import { changeSize } from "../../store/slices/mapSlice";
 import Flex from "../Flex";
-import logo from "../../assets/images/additionalInfoIcons/day.svg";
 
 const MapWrapper = styled.div`
   margin-bottom: 10px;
@@ -130,17 +128,25 @@ function Map() {
 
   const [center, setCenter] = useState(actualPosition ?? [53.9, 27.5667]);
   const zoom = 7;
-  const bounds = [
+
+  const [bounds, setBounds] = useState([
     [53.9, 27.5667],
-    [53.7, 27.4],
-  ];
+    [53.7, 27.3],
+  ]);
 
   useEffect(() => {
     if (actualPosition) {
       setCenter(actualPosition);
-      console.log(actualPosition);
+      setBounds([
+        [+actualPosition.lat, +actualPosition.lon],
+        [actualPosition.lat - 0.2, actualPosition.lon - 0.25],
+      ]);
     }
   }, [actualPosition]);
+
+  useEffect(() => {
+    console.log(bounds);
+  }, [bounds]);
 
   const changeMainCity = () => {
     dispatch(getWeatherByCoord(actualPosition));
@@ -197,26 +203,14 @@ function Map() {
     );
   }
 
-  // const [img, setImg] = useState('');
-  // const town = useSelector((state) => state.townWeather.weatherForecast);
-  // useEffect(() => {
-  //   if (town) {
-  //     setImg(town.list[0].weather[0].icon);
-  //     console.log(town.list[0].weather[0].icon);
-  //   }
-  // }, [town]);
-
-  // const mapRef = useRef();
-  // const L = window.L;
-  // console.log(L);
-  // useEffect(() => {
-  //   const map = mapRef.current.leafletElement;
-  //   const bounds = [[-26.5, -25], [1021.5, 1023]];
-  //   const image = L.imageOverlay(`https://openweathermap.org/img/w/${img}.png`, bounds).addTo(
-  //     map
-  //   );
-  //   map.fitBounds(image.getBounds());
-  // }, []);
+  const [img, setImg] = useState("");
+  const town = useSelector((state) => state.townWeather.weatherForecast);
+  useEffect(() => {
+    if (town) {
+      setImg(town.list[0].weather[0].icon);
+      console.log(img);
+    }
+  }, [town]);
 
   return (
     <MapWrap radius={borderRadius}>
@@ -240,18 +234,16 @@ function Map() {
         zoom={zoom}
         scrollWheelZoom={true}
         // ref={mapRef}
+        // crs={CRS.Simple}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <SVGOverlay bounds={bounds}>
-          {/* <rect x="0" y="0" width="50%" height="50%" />
-          <circle r="5" cx="10" cy="10" fill="red" />
-          <text x="50%" y="50%" stroke="white">
-            text
-          </text> */}
-        </SVGOverlay>
+        <ImageOverlay
+          bounds={bounds}
+          url={`https://openweathermap.org/img/w/${img}.png`}
+        />
         <DraggableMarker />
       </MapContainer>
     </MapWrap>

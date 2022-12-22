@@ -1,6 +1,4 @@
-import React, { useMemo, memo } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useMemo, memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setWeatherForecast } from "../store/slices/townWeatherSlice";
 import { changeError } from "../store/slices/errorsSlice";
@@ -8,6 +6,7 @@ import {
   getWeatherByCoord,
   getWeatherByName,
   getTownImage,
+  setIsError,
 } from "../store/slices/townWeatherSlice";
 import styled from "@emotion/styled";
 import MainLoader from "./loaders/MainLoader";
@@ -19,6 +18,8 @@ import ThreeHourlyForecastList from "./town/ThreeHourlyForecastList";
 import AdditionalInfo from "./town/AdditionalInfo";
 import Graph from "./town/Graph";
 import PersonalInfo from "./town/PersonalInfo";
+import Error from "./Error";
+import Input from "./Input";
 
 function TownWeather() {
   const townImage = useSelector(
@@ -60,19 +61,8 @@ function TownWeather() {
         border-radius: 10px;
       }
 
-      .town-weather__input {
-        margin-right: 20px;
-        padding: 3px;
-        outline: none;
-        border-radius: 5px;
-        border: 1px solid black;
-
-        &-error {
-          border-color: red;
-        }
-      }
-
       button {
+        margin-left: 20px;
         padding: 5px;
         border: none;
         border-radius: 5px;
@@ -93,6 +83,7 @@ function TownWeather() {
   const ENTER_KEY_CODE = 13;
   const [coord, setCoord] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [townOptions, setTownOptions] = useState([]);
   const [showPersonalInfo, setShowPersonalInfo] = useState(false);
   const [showError, setShowError] = useState(false);
   const [temp, setTemp] = useState("");
@@ -102,6 +93,45 @@ function TownWeather() {
   const dispatch = useDispatch();
 
   const isLoading = useSelector((state) => state.townWeather.isLoading);
+  const isError = useSelector((state) => state.townWeather.isError);
+
+  const optionList = useMemo(
+    () => [
+      "Amsterdam",
+      "Berlin",
+      "Dublin",
+      "Helsinki",
+      "Kyiv",
+      "Lisbon",
+      "Madrid",
+      "Oslo",
+      "Prague",
+      "Riga",
+      "Sofia",
+      "Stockholm",
+      "Tallinn",
+      "Vienna",
+      "Vilnius",
+      "Warsaw",
+      "Tbilisi",
+      "Rome",
+      "Paris",
+      "Moscow",
+      "Cairo",
+      "Minsk",
+      "Milan",
+      "London",
+    ],
+    []
+  );
+
+  useEffect(() => {
+    if (isError === true) {
+      setTimeout(() => {
+        dispatch(setIsError(false));
+      }, 5000);
+    }
+  }, [isError]);
 
   const weatherForecast = useSelector(
     (state) => state.townWeather.weatherForecast
@@ -125,9 +155,24 @@ function TownWeather() {
     }
   }, [coord, dispatch]);
 
+  const handleChange = (value, clear) => {
+    setInputValue(value);
+    if (value.length >= 2) {
+      const result = optionList.filter((item) =>
+        item.toLowerCase().includes(value.toLowerCase())
+      );
+      setTownOptions(result);
+    } else {
+      setTownOptions([]);
+    }
+    if (clear) {
+      setTownOptions([]);
+    }
+  };
+
   useEffect(() => {
-    console.log(townImage);
-  }, [townImage]);
+    console.log(inputValue);
+  }, [inputValue]);
 
   const changeCity = async () => {
     if (inputValue === "") {
@@ -150,6 +195,7 @@ function TownWeather() {
   const changeCityByEnter = (e) => {
     if (e.keyCode !== ENTER_KEY_CODE) return;
     changeCity();
+    setTownOptions([]);
   };
 
   useEffect(() => {
@@ -176,10 +222,6 @@ function TownWeather() {
     }
   }, [temp, visibility, main]);
 
-  const inputClass = showError
-    ? "town-weather__input town-weather__input-error"
-    : "town-weather__input";
-
   return (
     <Town>
       {isLoading ? (
@@ -190,14 +232,12 @@ function TownWeather() {
         <>
           <div className="town-weather__container">
             <Flex justify="start">
-              <input
-                autoFocus="autofocus"
-                className={inputClass}
-                type="text"
-                placeholder="Enter new city name"
+              <Input
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => changeCityByEnter(e)}
+                townOptions={townOptions}
+                handleChange={handleChange}
+                changeByEnter={changeCityByEnter}
+                showError={showError}
               />
               <button onClick={changeCity}>Change city</button>
             </Flex>
@@ -223,6 +263,7 @@ function TownWeather() {
           </Flex>
         </>
       )}
+      {isError && <Error />}
     </Town>
   );
 }

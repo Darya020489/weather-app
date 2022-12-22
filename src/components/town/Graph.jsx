@@ -10,6 +10,7 @@ const WeatherChart = styled.div`
 `;
 
 function Graph() {
+  const measure = useSelector((state) => state.indicators.measure);
   const tempList = useSelector((state) =>
     state.townWeather.weatherForecast.list.filter(
       (el, index) => index % 8 === 0
@@ -17,7 +18,7 @@ function Graph() {
   );
 
   const dataList = tempList.map((el, index) => {
-    return { x: index, y: getTemperature(el.main.temp, "°C") };
+    return { x: index, y: getTemperature(el.main.temp, measure) };
   });
   console.log("graph");
 

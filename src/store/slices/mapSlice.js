@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isSmall: true,
+  isSmall: false,
 };
 
 const mapSlice = createSlice({

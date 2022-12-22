@@ -10,6 +10,7 @@ import weatherService from "../services/weatherService";
 import classNames from "classnames";
 import AsideLoader from "./loaders/AsideLoader";
 import checkMarkIcon from "../assets/images/check-mark-icon.svg";
+import Input from "./Input";
 
 const CityList = styled.div`
   .town-list__header {
@@ -117,16 +118,46 @@ function TownList() {
   const [townsWeather, setTownsWeather] = useState([]);
   const [addingCity, setAddingCity] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [townOptions, setTownOptions] = useState([]);
   const [showError, setShowError] = useState(false);
   const dispatch = useDispatch();
   const measure = useSelector((state) => state.indicators.measure);
   let theme = useSelector((state) => state.theme.theme);
 
   const townsArr = useMemo(() => ["Paris", "Moscow", "Cairo"], []);
+  const optionList = useMemo(
+    () => [
+      "Amsterdam",
+      "Berlin",
+      "Dublin",
+      "Helsinki",
+      "Kyiv",
+      "Lisbon",
+      "Madrid",
+      "Oslo",
+      "Prague",
+      "Riga",
+      "Sofia",
+      "Stockholm",
+      "Tallinn",
+      "Vienna",
+      "Vilnius",
+      "Warsaw",
+      "Tbilisi",
+      "Rome",
+      "Paris",
+      "Moscow",
+      "Cairo",
+      "Minsk",
+      "Milan",
+      "London",
+    ],
+    []
+  );
 
   useEffect(() => {
     const currentList = JSON.parse(localStorage.getItem("cityList"));
-    if (currentList) {
+    if (currentList && currentList.length) {
       setTownsWeather(currentList);
     } else {
       townsArr.forEach(async (town) => {
@@ -150,30 +181,22 @@ function TownList() {
     setAddingCity(true);
   };
 
-  const addNewCity = async () => {
-    let townInTheList = townsWeather.find(
-      (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
-    );
-    if (townInTheList) {
-      dispatch(changeError("alreadyExists"));
-      setShowError(true);
-    } else if (inputValue.trim() === "") {
-      dispatch(changeError("emptyEnter"));
-      setShowError(true);
+  const handleChange = (value, clear) => {
+    setInputValue(value);
+    if (value.length >= 2) {
+      const result = optionList.filter((item) =>
+        item.toLowerCase().includes(value.toLowerCase())
+      );
+      setTownOptions(result);
     } else {
-      try {
-        const result = await weatherService.getByName(inputValue);
-        setTownsWeather([...townsWeather, result]);
-        setShowError(false);
-        setAddingCity(false);
-      } catch (err) {
-        console.log(err);
-      }
+      setTownOptions([]);
+    }
+    if (clear) {
+      setTownOptions([]);
     }
   };
 
-  const addNewCityByEnter = async (e) => {
-    if (e.keyCode !== ENTER_KEY_CODE) return;
+  const addNewCity = async () => {
     let townInList = townsWeather.find(
       (town) => town.city.name.toLowerCase() === inputValue.toLowerCase()
     );
@@ -186,23 +209,25 @@ function TownList() {
     } else {
       try {
         const result = await weatherService.getByName(inputValue);
-
         setTownsWeather([...townsWeather, result]);
         setShowError(false);
         setAddingCity(false);
+        setInputValue("");
       } catch (err) {
         console.log(err);
       }
     }
   };
 
+  const addNewCityByEnter = async (e) => {
+    if (e.keyCode !== ENTER_KEY_CODE) return;
+    addNewCity();
+    setTownOptions([]);
+  };
+
   useEffect(() => {
     localStorage.setItem("cityList", JSON.stringify(townsWeather));
   }, [townsWeather]);
-
-  const inputClass = showError
-    ? "town-list__input town-list__input-error"
-    : "town-list__input";
 
   const classTownListHeader = classNames("town-list__header", {
     "town-list__header_dark": theme === "dark",
@@ -259,14 +284,14 @@ function TownList() {
         </label>
       </Flex>
       {addingCity && (
-        <Flex margin="0 0 10px 0">
-          <input
-            type="text"
-            placeholder="Enter the city"
-            autoFocus="autofocus"
-            className={inputClass}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => addNewCityByEnter(e)}
+        <Flex justify="space-around">
+          <Input
+            value={inputValue}
+            townOptions={townOptions}
+            handleChange={handleChange}
+            changeByEnter={addNewCityByEnter}
+            showError={showError}
+            width="90%"
           />
           <button className="town-list__add-city-btn" onClick={addNewCity}>
             Add

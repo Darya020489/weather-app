@@ -67,6 +67,7 @@ function MainLayout() {
           direction="column"
           width="20%"
           height="100%"
+          padding="0 0 10px 0"
           border="1px solid rgba(144, 141, 141, 0.829)"
         >
           {actualSize && <Map />}
