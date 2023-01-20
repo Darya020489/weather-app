@@ -40,9 +40,9 @@ function MainLayout() {
     setActualSize(mapIsSmall);
   }, [mapIsSmall]);
 
-  const switchTheme = () => {
-    dispatch(changeTheme());
-  };
+  // const switchTheme = () => {
+  //   dispatch(changeTheme());
+  // };
 
   return (
     <MainContainer>
@@ -54,12 +54,13 @@ function MainLayout() {
         <img className="main__img" src={logo} alt="weather" />
       </Flex>
       <Flex
-        justify="space-between"
+        // justify="space-between"
+        justify="flex-end"
         padding="0 15px 0 15px"
         background="mistyrose"
         border="1px solid rgba(192, 185, 185, 0.829)"
       >
-        <CustomizedSwitches switchTheme={switchTheme} />
+        {/* <CustomizedSwitches switchTheme={switchTheme} /> */}
         <DateContainer />
       </Flex>
       <Flex align="start">

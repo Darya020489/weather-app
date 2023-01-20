@@ -148,6 +148,17 @@ function Map() {
     console.log(bounds);
   }, [bounds]);
 
+  const [img, setImg] = useState("");
+  const town = useSelector((state) => state.townWeather.weatherForecast);
+  useEffect(() => {
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(!img.length){
+    if (town) {
+      setImg(town.list[0].weather[0].icon);
+    }
+  }
+  }, [town]);
+
   const changeMainCity = () => {
     dispatch(getWeatherByCoord(actualPosition));
   };
@@ -202,15 +213,6 @@ function Map() {
       ></Marker>
     );
   }
-
-  const [img, setImg] = useState("");
-  const town = useSelector((state) => state.townWeather.weatherForecast);
-  useEffect(() => {
-    if (town) {
-      setImg(town.list[0].weather[0].icon);
-      console.log(img);
-    }
-  }, [town]);
 
   return (
     <MapWrap radius={borderRadius}>
